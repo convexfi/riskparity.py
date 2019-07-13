@@ -4,4 +4,5 @@ build/
 *.so
 riskparityportfolio.egg-info/
 var/
+.DS_Store
 
