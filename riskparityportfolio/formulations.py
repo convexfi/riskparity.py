@@ -14,7 +14,7 @@ class RiskConcentrationFunction:
     def gradient_risk_concentration_vector(self, weights=None, covariance=None,
                                            budget=None):
         with tf.GradientTape() as t:
-            tf.watch(weights)
+            t.watch(weights)
             return t.gradient(self.risk_concentration_vector, weights)
 
 class RiskContribOverBudgetDoubleIndex(RiskConcentrationFunction):

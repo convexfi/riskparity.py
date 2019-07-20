@@ -7,7 +7,7 @@ def test():
     x = np.random.normal(size=t).reshape((n, -1))
     corr = x @ x.T / t
     b = np.ones(len(corr)) / len(corr)
-    w = rpp.design(corr, b, )
+    w = rpp.vanilla.design(corr, b)
     rc = w @ (corr * w)
     rc = rc / np.sum(rc)
     # assert that the portfolio respect the budget constraint

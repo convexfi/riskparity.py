@@ -32,7 +32,7 @@ corr = x @ x.T
 b = np.ones(len(corr)) / len(corr)
 
 # design the portfolio
-w = rpp.design(corr, b)
+w = rpp.vanilla.design(corr, b)
 print(w)
 
 # compute the risk budgeting

@@ -38,7 +38,7 @@ Eigen::VectorXd risk_parity_portfolio_ccd_spinu(const Eigen::MatrixXd& Sigma,
 namespace py = pybind11;
 
 
-PYBIND11_MODULE(riskparityportfolio, m) {
+PYBIND11_MODULE(vanilla, m) {
   m.doc() = "design of risk parity portfolios";
   m.def("design", &risk_parity_portfolio_ccd_spinu,
         py::arg("Sigma"), py::arg("b"),

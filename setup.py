@@ -31,8 +31,8 @@ class get_pybind_include(object):
 
 ext_modules = [
     Extension(
-        'riskparityportfolio',
-        ['src/riskparityportfolio.cpp'],
+        'riskparityportfolio.vanilla',
+        ['riskparityportfolio/vanilla.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
@@ -119,7 +119,15 @@ setup(
     long_description='',
     ext_modules=ext_modules,
     install_requires=['pybind11>=2.2', 'numpy', 'tensorflow'],
+    setup_requires=['pybind11>=2.2', 'numpy', 'tensorflow'],
     cmdclass={'build_ext': BuildExt},
+    classifiers=[
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Financial and Insurance Industry',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3.0',
+    ],
     zip_safe=False,
     include_package_data=True,
 )
