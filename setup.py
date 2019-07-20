@@ -118,8 +118,8 @@ setup(
     description='Blazingly fast design of risk parity portfolios',
     long_description='',
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2', 'numpy', 'tensorflow'],
-    setup_requires=['pybind11>=2.2', 'numpy', 'tensorflow'],
+    install_requires=['pybind11>=2.2', 'numpy', 'tensorflow', 'osqp'],
+    setup_requires=['pybind11>=2.2', 'numpy', 'tensorflow', 'osqp'],
     cmdclass={'build_ext': BuildExt},
     classifiers=[
     'Development Status :: 3 - Alpha',
