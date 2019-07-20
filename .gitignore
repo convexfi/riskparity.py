@@ -5,4 +5,4 @@ build/
 riskparityportfolio.egg-info/
 var/
 .DS_Store
-
+.coverage

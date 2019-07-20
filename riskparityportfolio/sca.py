@@ -1,4 +1,9 @@
+import warnings
 import numpy as np
+
+
+__all__ = ['RiskParityPortfolio']
+
 
 class RiskParityPortfolio:
 
@@ -13,7 +18,7 @@ class RiskParityPortfolio:
     def budget(self):
         return self._budget
 
-    @buget.setter
+    @budget.setter
     def budget(self, value):
         if value is None:
             self._budget = np.ones(self.number_of_assets) / self.number_of_assets
@@ -56,3 +61,4 @@ class RiskParityPortfolio:
 
 def project_line_and_box(weights, lower_bound, upper_bound):
     def objective_function(variable, weights):
+        pass
