@@ -1,0 +1,14 @@
+matrix:
+  include:
+    - language: python
+      python:
+        - 3.7
+      before_install:
+        - sudo apt-get install -y python-numpy
+        - pip install tensorflow==2.0.0-beta1
+        - pip install codecov
+        - pip install pytest-cov
+      script:
+        - pytest
+      after_sucess:
+        - codecov
