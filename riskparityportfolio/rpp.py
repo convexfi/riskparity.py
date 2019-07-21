@@ -2,7 +2,7 @@ import warnings
 import tensorflow as tf
 import numpy as np
 from .sca import SuccessiveConvexOptimizer
-from .riskfunctions import RiskContribOverBudgetDoubleIndex
+from .riskfunctions import RiskContribOverBudgetDoubleIndex, RiskContribOverVarianceMinusBudget
 
 
 __all__ = ['RiskParityPortfolio']
@@ -24,6 +24,10 @@ class RiskParityPortfolio:
         self.weights = weights
         self.risk_concentration = risk_concentration
         self.validate()
+
+    def get_diag_solution():
+        w = np.sqrt(self.budget.numpy()) / np.sqrt(np.diagonal(self.covariance.nump()))
+        return w / w.sum()
 
     @property
     def weights(self):
@@ -49,9 +53,7 @@ class RiskParityPortfolio:
 
     @risk_concentration.setter
     def risk_concentration(self, value):
-        self._risk_concentration = RiskContribOverBudgetDoubleIndex(weights=self.weights,
-                                                                    covariance=self.covariance,
-                                                                    budget=self.budget)
+        self._risk_concentration = RiskContribOverVarianceMinusBudget(self)
 
     @property
     def budget(self):

@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import quadprog
+from tqdm import tqdm
 
 
 __all__ = ['SuccessiveConvexOptimizer']
@@ -87,7 +88,7 @@ class SuccessiveConvexOptimizer:
     Successive Convex Approximation optimizer taylored for the risk parity problem.
     """
     def __init__(self, portfolio, tau = None, gamma = 0.9, zeta = 1E-7, funtol = 1E-6,
-                 wtol = 1E-6, maxiter = 5000):
+                 wtol = 1E-6, maxiter = 50):
         self.portfolio = portfolio
         self.tau       = (tau or 0.05 * np.sum(np.diag(self.portfolio.covariance.numpy()))
                                  / (2 * self.portfolio.number_of_assets))
@@ -100,6 +101,8 @@ class SuccessiveConvexOptimizer:
         self.Cmat      = np.vstack((np.ones(self.portfolio.number_of_assets),
                                     np.eye(self.portfolio.number_of_assets))).T
         self.bvec      = np.concatenate((np.array([1.]), np.zeros(self.portfolio.number_of_assets)))
+        self._funk = self.portfolio.risk_concentration.evaluate()
+        self.objective_function = [self._funk.numpy()]
 
     def iterate(self):
         wk = self.portfolio.weights
@@ -110,13 +113,26 @@ class SuccessiveConvexOptimizer:
         q = 2 * tf.linalg.matvec(At, g) - tf.linalg.matvec(Q, wk)
         w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.Cmat, b=self.bvec, meq=1)[0]
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
-        has_converged = (tf.abs(self.portfolio.weights - wk) <=
-                         .5 * self.wtol * (tf.abs(self.portfolio.weights) + tf.abs(wk))).numpy().all()
-        return not has_converged
+        fun_next = self.portfolio.risk_concentration.evaluate()
+        self.objective_function.append(fun_next.numpy())
+        has_w_converged = (tf.abs(self.portfolio.weights - wk) <=
+                           .5 * self.wtol * (tf.abs(self.portfolio.weights) +
+                                             tf.abs(wk))).numpy().all()
+        has_fun_converged = (tf.abs(self._funk - fun_next) <=
+                             .5 * self.funtol * (tf.abs(self._funk) +
+                                                 tf.abs(fun_next))).numpy().all()
+        if has_w_converged and has_fun_converged:
+            return not (has_w_converged and has_fun_converged)
+        self.gamma = self.gamma * (1 - self.zeta * self.gamma)
+        self._funk = fun_next
+        return True
 
     def solve(self):
         i = 0
-        while(self.iterate() and i < self.maxiter): i += 1
+        with tqdm(total=self.maxiter) as pbar:
+            while(self.iterate() and i < self.maxiter):
+                i += 1
+                pbar.update()
 
 
 def project_line_and_box(weights, lower_bound, upper_bound):
