@@ -19,6 +19,7 @@ before_install:
   conda install -q conda-build
   conda create -q -n test-environment python=$CONDA
   source activate test-environment
+- pip install Cython
 - python -m pip install 'pybind11>=2.3'
 - pip install pytest-cov
 - pip install codecov
