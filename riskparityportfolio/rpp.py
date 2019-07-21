@@ -47,6 +47,8 @@ class RiskParityPortfolio:
         self.weights = weights
         self.risk_concentration = risk_concentration
         self.validate()
+        self.has_variance = False
+        self.has_mean_return = False
 
     def get_diag_solution():
         w = np.sqrt(self.budget.numpy()) / np.sqrt(np.diagonal(self.covariance.nump()))
@@ -131,6 +133,15 @@ class RiskParityPortfolio:
     def validate(self):
         if self.covariance.shape[0] != self.budget.shape[0]:
             raise ValueError("shape mismatch between covariance matrix and budget vector")
+
+    def add_mean_return(self, alpha, mean_return):
+        self.alpha = alpha
+        self.mean_return = mean_return
+        self.has_mean_return = True
+
+    def add_variance(self, lmd):
+        self.lmd = lmd
+        self.has_variance = True
 
     def design(self, **kwargs):
         sca = SuccessiveConvexOptimizer(self, **kwargs)
