@@ -29,6 +29,6 @@ install:
 - |
   python setup.py develop
 script:
-- pytest
+- pytest --cov=./
 after_sucess:
 - codecov
