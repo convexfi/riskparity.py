@@ -4,7 +4,10 @@ fast and scalable design of risk parity portfolios in Python
 
 [![PyPI version](https://badge.fury.io/py/riskparityportfolio.svg)](https://badge.fury.io/py/riskparityportfolio)
 [![Downloads](https://pepy.tech/badge/riskparityportfolio)](https://pepy.tech/project/riskparityportfolio)
+
 [![Travis (.org)](https://img.shields.io/travis/mirca/riskparity.py.svg?label=travis-ci&style=flat-square)](https://travis-ci.org/mirca/riskparity.py)
+[![codecov](https://codecov.io/gh/mirca/riskparity.py/branch/master/graph/badge.svg)](https://codecov.io/gh/mirca/riskparity.py)
+
 
 **riskparityportfolio** provides tools to design risk parity portfolios.
 In its simplest form, we consider the convex formulation with a unique solution proposed by
