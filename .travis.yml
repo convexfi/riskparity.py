@@ -2,8 +2,8 @@ language: cpp
 dist: trusty
 matrix:
   include:
-  - os: linux
-    env: CONDA=3.6
+# - os: linux
+#   env: CONDA=3.6
   - os: osx
     env: CONDA=3.6
 before_install:
@@ -23,6 +23,7 @@ before_install:
 - python -m pip install 'pybind11>=2.3'
 - pip install pytest-cov
 - pip install codecov
+- pip install quadprog
 - pip install tensorflow==2.0.0-beta1
 install:
 - |

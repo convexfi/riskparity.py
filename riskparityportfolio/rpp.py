@@ -13,6 +13,29 @@ class RiskParityPortfolioValidator:
         pass
 
 class RiskParityPortfolio:
+    """Designs risk parity portfolios by solving the following optimization problem
+
+    minimize R(w) - alpha * mu.T * w + beta * w.T Sigma w
+    subject to Cw = c, Dw <= d
+
+    where R is a risk concentration function, and alpha and beta are trade-off
+    parameters for the expected return and the variance, respectively.
+
+    Parameters
+    ----------
+    covariance : array, shape=(n, n)
+        covariance matrix of the assets
+    budget : array, shape=(n,)
+        budget vector
+    equality_constraints : string
+        the equality constraint expression
+    inequality_constraints : string
+        the inequality constraint expression
+    weights : array, shape=(n,)
+        weights of the portfolio
+    risk_concentration : class
+        any valid child class of RiskConcentrationFunction
+    """
 
     def __init__(self, covariance, budget=None,
                  equality_constraints=None,
@@ -53,7 +76,13 @@ class RiskParityPortfolio:
 
     @risk_concentration.setter
     def risk_concentration(self, value):
-        self._risk_concentration = RiskContribOverVarianceMinusBudget(self)
+        if value is None:
+            self._risk_concentration = RiskContribOverVarianceMinusBudget(self)
+        elif isinstance(value, RiskConcetrationFunction):
+            self._risk_concentration = value(self)
+        else:
+            raise ValueError("risk_concentration {} is not a valid child class"
+                             "of RiskConcentrationFunction".format(value))
 
     @property
     def budget(self):
