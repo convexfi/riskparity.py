@@ -1,8 +1,6 @@
 import warnings
 import tensorflow as tf
 import numpy as np
-import osqp
-from scipy.sparse import csc_matrix
 from .sca import SuccessiveConvexOptimizer
 from .riskfunctions import RiskContribOverBudgetDoubleIndex
 

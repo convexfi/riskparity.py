@@ -1,8 +1,6 @@
-import warnings
 import tensorflow as tf
 import numpy as np
 import quadprog
-from scipy.sparse import csc_matrix
 
 
 __all__ = ['SuccessiveConvexOptimizer']
