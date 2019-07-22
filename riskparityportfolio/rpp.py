@@ -134,15 +134,38 @@ class RiskParityPortfolio:
         if self.covariance.shape[0] != self.budget.shape[0]:
             raise ValueError("shape mismatch between covariance matrix and budget vector")
 
-    def add_mean_return(self, alpha, mean_return):
+    def add_mean_return(self, alpha, mean):
+        """Whether to consider the maximization of the mean return of the portfolio.
+
+        Parameters
+        ----------
+        alpha : float
+            Hyperparameter associated with the mean return
+        mean : array, shape=(n,)
+            Vector of means
+        """
         self.alpha = alpha
-        self.mean_return = mean_return
+        self.mean = mean
         self.has_mean_return = True
 
     def add_variance(self, lmd):
+        """Whether to consider the minimization of the variance of the portfolio.
+
+        Parameters
+        ----------
+        lmd : float
+            Hyperparameter associated with the variance
+        """
         self.lmd = lmd
         self.has_variance = True
 
     def design(self, **kwargs):
+        """Optimize the portfolio.
+
+        Parameters
+        ----------
+        kwargs : dict
+            Dictionary of parameters to be passed to SuccessiveConvexOptimizer.
+        """
         sca = SuccessiveConvexOptimizer(self, **kwargs)
         sca.solve()

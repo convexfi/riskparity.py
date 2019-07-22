@@ -112,9 +112,9 @@ class SuccessiveConvexOptimizer:
         Q = 2 * At @ A + self.tau * tf.eye(self.portfolio.number_of_assets, dtype=tf.float64)
         q = 2 * tf.linalg.matvec(At, g) - tf.linalg.matvec(Q, wk)
         if self.portfolio.has_variance:
-            Q = Q + self.portfolio.lmd * self.portfolio.covariance
+            Q += self.portfolio.lmd * self.portfolio.covariance
         if self.portfolio.has_mean_return:
-            q = q - self.portfolio.alpha * self.portfolio.mean_return
+            q -= self.portfolio.alpha * self.portfolio.mean_return
         w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.Cmat, b=self.bvec, meq=1)[0]
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
         fun_next = self.portfolio.risk_concentration.evaluate()
