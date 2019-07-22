@@ -101,8 +101,18 @@ class SuccessiveConvexOptimizer:
         self.Cmat      = np.vstack((np.ones(self.portfolio.number_of_assets),
                                     np.eye(self.portfolio.number_of_assets))).T
         self.bvec      = np.concatenate((np.array([1.]), np.zeros(self.portfolio.number_of_assets)))
-        self._funk = self.portfolio.risk_concentration.evaluate()
+        self._funk = self.get_objective_function_value()
         self.objective_function = [self._funk.numpy()]
+
+    def get_objective_function_value(self):
+        obj = self.portfolio.risk_concentration.evaluate()
+        if self.portfolio.has_mean_return:
+            obj -= tf.tensordot(self.portfolio.mean_return, self.portfolio.weights)
+        if self.portfolio.has_variance:
+            obj += tf.tensordot(self.portfolio.weights,
+                                tf.linalg.matvec(self.portfolio.covariance,
+                                                 self.portoflio.weights))
+        return obj
 
     def iterate(self):
         wk = self.portfolio.weights
@@ -117,7 +127,7 @@ class SuccessiveConvexOptimizer:
             q -= self.portfolio.alpha * self.portfolio.mean_return
         w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.Cmat, b=self.bvec, meq=1)[0]
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
-        fun_next = self.portfolio.risk_concentration.evaluate()
+        fun_next = self.get_objective_function_value()
         self.objective_function.append(fun_next.numpy())
         has_w_converged = (tf.abs(self.portfolio.weights - wk) <=
                            .5 * self.wtol * (tf.abs(self.portfolio.weights) +
@@ -125,8 +135,8 @@ class SuccessiveConvexOptimizer:
         has_fun_converged = (tf.abs(self._funk - fun_next) <=
                              .5 * self.funtol * (tf.abs(self._funk) +
                                                  tf.abs(fun_next))).numpy().all()
-        if has_w_converged and has_fun_converged:
-            return not (has_w_converged and has_fun_converged)
+        if has_w_converged or has_fun_converged:
+            return False
         self.gamma = self.gamma * (1 - self.zeta * self.gamma)
         self._funk = fun_next
         return True

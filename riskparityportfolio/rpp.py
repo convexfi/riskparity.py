@@ -167,5 +167,5 @@ class RiskParityPortfolio:
         kwargs : dict
             Dictionary of parameters to be passed to SuccessiveConvexOptimizer.
         """
-        sca = SuccessiveConvexOptimizer(self, **kwargs)
-        sca.solve()
+        self.sca = SuccessiveConvexOptimizer(self, **kwargs)
+        self.sca.solve()
