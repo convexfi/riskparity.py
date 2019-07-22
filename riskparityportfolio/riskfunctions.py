@@ -34,6 +34,12 @@ class RiskContribOverVarianceMinusBudget(RiskConcentrationFunction):
                 tf.linalg.matvec(self.portfolio.covariance, self.portfolio.weights))
         return marginal_risk / tf.reduce_sum(marginal_risk) - self.portfolio.budget
 
+    def jacobian_risk_concentration_vector(self):
+        Sigma_w = tf.linalg.matvec(self.portfolio.covariance, self.portfolio.weights)
+        r = tf.multiply(self.portfolio.weights, Sigma_w)
+        sum_r = tf.reduce_sum(r)
+        Ut = tf.linalg.diag(Sigma_w) + tf.multiply(self.portfolio.covariance, self.portfolio.weights)
+        return Ut / sum_r - 2 / (sum_r ** 2) * (r[..., None] * Sigma_w[..., None])
 
 def repeat(vector, times):
     vector = tf.reshape(tf.tile(tf.reshape(vector, [-1, 1]), [1, times]), [-1])
