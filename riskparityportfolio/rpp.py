@@ -15,7 +15,7 @@ class RiskParityPortfolioValidator:
 class RiskParityPortfolio:
     """Designs risk parity portfolios by solving the following optimization problem
 
-    minimize R(w) - alpha * mu.T * w + beta * w.T Sigma w
+    minimize R(w) - alpha * mu.T * w + lambda * w.T Sigma w
     subject to Cw = c, Dw <= d
 
     where R is a risk concentration function, and alpha and beta are trade-off
@@ -50,10 +50,22 @@ class RiskParityPortfolio:
         self.has_variance = False
         self.has_mean_return = False
 
-    def get_diag_solution():
+    def get_diag_solution(self):
         w = np.sqrt(self.budget.numpy()) / np.sqrt(np.diagonal(self.covariance.nump()))
         return w / w.sum()
 
+    @property
+    def mean_return(self):
+        if self.has_mean_return:
+            return tf.tensordot(self.weights, self.mean, axes=1)
+        else:
+            raise ValueError("the portfolio mean has not been specified, please use add_mean_return")
+
+    @property
+    def variance(self):
+        return tf.sqrt(tf.tensordot(self.weights,
+                                    tf.linalg.matvec(self.covariance,
+                                                     self.weights), axes=1))
     @property
     def risk_contributions(self):
         rc = tf.tensordot(self.weights, tf.multiply(self.covariance, self.weights), axes=1)

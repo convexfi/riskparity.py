@@ -107,11 +107,9 @@ class SuccessiveConvexOptimizer:
     def get_objective_function_value(self):
         obj = self.portfolio.risk_concentration.evaluate()
         if self.portfolio.has_mean_return:
-            obj -= tf.tensordot(self.portfolio.mean_return, self.portfolio.weights)
+            obj -= self.portfolio.mean_return
         if self.portfolio.has_variance:
-            obj += tf.tensordot(self.portfolio.weights,
-                                tf.linalg.matvec(self.portfolio.covariance,
-                                                 self.portoflio.weights))
+            obj += self.portfolio.variance
         return obj
 
     def iterate(self):
@@ -124,7 +122,7 @@ class SuccessiveConvexOptimizer:
         if self.portfolio.has_variance:
             Q += self.portfolio.lmd * self.portfolio.covariance
         if self.portfolio.has_mean_return:
-            q -= self.portfolio.alpha * self.portfolio.mean_return
+            q -= self.portfolio.alpha * self.portfolio.mean
         w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.Cmat, b=self.bvec, meq=1)[0]
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
         fun_next = self.get_objective_function_value()
