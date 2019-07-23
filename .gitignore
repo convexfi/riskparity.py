@@ -1,8 +1,0 @@
-__pycache__/
-dist/
-build/
-*.so
-riskparityportfolio.egg-info/
-var/
-.DS_Store
-.coverage
