@@ -44,6 +44,14 @@ R Version
 
 An R version of this package is available at https://github.com/dppalomar/riskParityPortfolio
 
+Tutorials
+---------
+
+.. toctree::
+
+        tutorials/minimal-usage.ipynb
+        tutorials/including-mean-return-and-variance.ipynb
+
 References
 ----------
 
