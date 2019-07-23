@@ -6,3 +6,4 @@ riskparityportfolio.egg-info/
 var/
 .DS_Store
 .coverage
+docs/source/tutorials/.ipynb_checkpoints/*

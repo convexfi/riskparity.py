@@ -55,6 +55,11 @@ class RiskParityPortfolio:
         return w / w.sum()
 
     @property
+    def risk_contributions(self):
+        rc = tf.tensordot(self.weights, tf.multiply(self.covariance, self.weights), axes=1)
+        return rc / tf.reduce_sum(rc)
+
+    @property
     def weights(self):
         return self._weights
 
