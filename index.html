@@ -12,6 +12,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
 <meta charset='utf-8'>
@@ -63,7 +64,13 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">riskparity.py</a></li>
+<li><a class="reference internal" href="#">riskparity.py</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#r-version">R Version</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -105,9 +112,55 @@
       
   <div class="section" id="riskparity-py">
 <h1>riskparity.py<a class="headerlink" href="#riskparity-py" title="Permalink to this headline">¶</a></h1>
-<p>riskparity.py implements fast and scalable algorithms to design risk (budgeting) parity portfolios.</p>
-<p>The algorithms are based on the works of Spinu (), Roncalli (), and Feng &amp; Palomar (2016).</p>
+<p><strong>riskparity.py</strong> implements fast and scalable algorithms to design risk (budgeting) parity portfolios.
+The algorithms are based on the works of Spinu (2013), Griveau-Billion <em>et. al.</em> (2013), and Feng &amp; Palomar (2015).</p>
+<p>We consider the following optimization problem and its particular cases</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{ll}
+\underset{\mathbf{w}}{\textsf{minimize}} &amp;
+R(\mathbf{w}) - \alpha \mathbf{w}^{\top}\boldsymbol{\mu} + \beta \mathbf{w}^{\top}\boldsymbol{\Sigma}\mathbf{w}\\
+\textsf{subject to} &amp; \mathbf{C}\mathbf{w} = \mathbf{c}, \mathbf{D}\mathbf{w} \leq \mathbf{d}
+\end{array}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(R\)</span> is a risk concentration function.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>riskparity.py</strong> can be installed via pip as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install riskparityportfolio
+</pre></div>
+</div>
+<p>Its <em>development</em> version can be installed as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/mirca/riskparity.py
+$ cd riskparity.py
+$ pip install -e .
+</pre></div>
+</div>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p><strong>riskparity.py</strong> is built on top of <strong>numpy</strong>, <strong>tensorflow2.0</strong>, <strong>quadprog</strong>, <strong>pybind</strong>, and <strong>tqdm</strong>.</p>
+</div>
+<div class="section" id="r-version">
+<h2>R Version<a class="headerlink" href="#r-version" title="Permalink to this headline">¶</a></h2>
+<p>An R version of this package is available at <a class="reference external" href="https://github.com/dppalomar/riskParityPortfolio">https://github.com/dppalomar/riskParityPortfolio</a></p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><ol class="first upperalpha" start="6">
+<li>Spinu, “An algorithm for computing risk parity weights”, SSRN, 2013.</li>
+</ol>
+</li>
+<li><ol class="first upperalpha" start="20">
+<li>Griveau-Billion, J. Richard, and T. Roncalli, “A fast algorithm for computing high-dimensional risk parity portfolios” ArXiv preprint, 2013.</li>
+</ol>
+</li>
+<li><ol class="first upperalpha" start="25">
+<li>Feng and D. P. Palomar, “SCRIP: Successive convex optimization methods for risk parity portfolios design” IEEE Trans. Signal Process., vol. 63, no. 19, pp. 5285–5300, Oct. 2015.</li>
+</ol>
+</li>
+</ul>
 <div class="toctree-wrapper compound">
+</div>
 </div>
 </div>
 
