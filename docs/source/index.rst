@@ -9,6 +9,18 @@ riskparity.py
 **riskparity.py** implements fast and scalable algorithms to design risk (budgeting) parity portfolios.
 The algorithms are based on the works of Spinu (2013), Griveau-Billion *et. al.* (2013), and Feng & Palomar (2015).
 
+We consider the following optimization problem and its particular cases
+
+.. math::
+
+        \begin{array}{ll}
+        \underset{\mathbf{w}}{\textsf{minimize}} &
+        R(\mathbf{w}) - \alpha \mathbf{w}^{\top}\boldsymbol{\mu} + \beta \mathbf{w}^{\top}\boldsymbol{\Sigma}\mathbf{w}\\
+        \textsf{subject to} & \mathbf{C}\mathbf{w} = \mathbf{c}, \mathbf{D}\mathbf{w} \leq \mathbf{d}
+        \end{array}
+
+where :math:`R` is a risk concentration function.
+
 Installation
 ------------
 
