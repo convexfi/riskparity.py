@@ -88,7 +88,7 @@ class SuccessiveConvexOptimizer:
     Successive Convex Approximation optimizer taylored for the risk parity problem.
     """
     def __init__(self, portfolio, tau = None, gamma = 0.9, zeta = 1E-7, funtol = 1E-6,
-                 wtol = 1E-6, maxiter = 50):
+                 wtol = 1E-6, maxiter = 500):
         self.portfolio = portfolio
         self.tau       = (tau or 0.05 * np.sum(np.diag(self.portfolio.covariance.numpy()))
                                  / (2 * self.portfolio.number_of_assets))
