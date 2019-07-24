@@ -51,7 +51,7 @@ class RiskParityPortfolio:
         self.has_mean_return = False
 
     def get_diag_solution(self):
-        w = np.sqrt(self.budget.numpy()) / np.sqrt(np.diagonal(self.covariance.nump()))
+        w = np.sqrt(self.budget.numpy()) / np.sqrt(np.diagonal(self.covariance.numpy()))
         return w / w.sum()
 
     @property
