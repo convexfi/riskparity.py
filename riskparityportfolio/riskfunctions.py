@@ -13,10 +13,12 @@ class RiskConcentrationFunction:
 
     # jacobian of the vector function risk_concentration_vector with respect to weights
     def jacobian_risk_concentration_vector(self):
-        with tf.GradientTape() as t:
-            t.watch(self.portfolio.weights)
-            risk_vec = self.risk_concentration_vector()
-        return t.jacobian(risk_vec, self.portfolio.weights)
+        raise NotImplementedError("this method should be implemented in the child class")
+        # I'm not gonna use autograd here. We have the derivatives analytically already.
+        #with tf.GradientTape() as t:
+        #    t.watch(self.portfolio.weights)
+        #    risk_vec = self.risk_concentration_vector()
+        #return t.jacobian(risk_vec, self.portfolio.weights)
 
 
 class RiskContribOverBudgetDoubleIndex(RiskConcentrationFunction):
