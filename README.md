@@ -1,10 +1,7 @@
 # riskparity.py
 
-fast and scalable design of risk parity portfolios in Python
-
 [![PyPI version](https://badge.fury.io/py/riskparityportfolio.svg)](https://badge.fury.io/py/riskparityportfolio)
 [![Downloads](https://pepy.tech/badge/riskparityportfolio)](https://pepy.tech/project/riskparityportfolio)
-
 [![Travis (.org)](https://img.shields.io/travis/mirca/riskparity.py.svg?label=travis-ci&style=flat-square)](https://travis-ci.org/mirca/riskparity.py)
 [![codecov](https://codecov.io/gh/mirca/riskparity.py/branch/master/graph/badge.svg)](https://codecov.io/gh/mirca/riskparity.py)
 
@@ -16,52 +13,23 @@ In its simplest form, we consider the convex formulation with a unique solution 
 which are usually nonconvex, we implement the successive convex approximation
 method proposed by [Feng & Palomar (2015)](https://doi.org/10.1109/TSP.2015.2452219).
 
-For the R version of this library,
-check out: [https://mirca.github.io/riskParityPortfolio](https://mirca.github.io/riskParityPortfolio).
+**Documentation:** [**https://mirca.github.io/riskparity.py**](https://mirca.github.io/riskparity.py)
 
-## Installation
+**R version:** [**https://mirca.github.io/riskParityPortfolio**](https://mirca.github.io/riskParityPortfolio)
 
-### Dependencies
-`riskparityportfolio` depends on `numpy`, `tensorflow2`, `quadprog`,
-`pybind`, and `tqdm`, which can be installed via `pip`.
+## License
 
-The *stable* version of `riskparityportfolio` can be installed via `pip`:
-```
-$ pip install riskparityportfolio
-```
+Copyright 2019 Ze Vinicius and Daniel Palomar
 
-The *development* version of `riskparityportfolio` can be installed as:
-```
-$ git clone https://github.com/mirca/riskparity.py
-$ cd riskparity.py
-$ pip install -e .
-```
+This project is licensed under the terms of the MIT License.
 
-## Basic usage
-```{python}
-import numpy as np
-import riskparityportfolio as rpp
-np.random.seed(42)
+## Disclaimer
 
-# creates a correlation matrix from time-series of five assets
-x = np.random.normal(size=1000).reshape((5, -1))
-S = x @ x.T
-
-# create the desired risk budgeting vector
-b = np.ones(len(S)) / len(S)
-
-# design the portfolio
-w = rpp.vanilla.design(S, b)
-print(w)
-
-# compute the risk budgeting
-rc = w @ (corr * w)
-print(rc / np.sum(rc))
-
-# let's try a different budget
-b = np.array([0.01, 0.09, .1, .1, .7])
-w = rpp.design(corr, b)
-print(w)
-rc = w @ (corr * w)
-print(rc / np.sum(rc))
-```
+The information, software, and any additional resources contained in this repository are not intended as,
+and shall not be understood or construed as, financial advice. Past performance is not a reliable indicator
+of future results and investors may not recover the full amount invested.
+The [authors](https://github.com/dppalomar/riskParityPortfolio/blob/master/AUTHORS.md) of this repository
+accept no liability whatsoever for any loss or damage you may incur.  Any opinions expressed in this repository
+are from the personal research and experience of the
+[authors](https://github.com/dppalomar/riskParityPortfolio/blob/master/AUTHORS.md) and are intended as
+educational material.
