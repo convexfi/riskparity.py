@@ -51,6 +51,7 @@ Tutorials
 
         tutorials/minimal-usage.ipynb
         tutorials/including-mean-return-and-variance.ipynb
+        tutorials/comparison-with-pyrb.ipynb
 
 References
 ----------
