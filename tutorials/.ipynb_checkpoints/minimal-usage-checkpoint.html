@@ -56,6 +56,7 @@
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../minimal-usage.html">Minimal Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../including-mean-return-and-variance.html">Including mean return and variance into the risk parity formulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comparison-with-pyrb.html">Comparison with pyrb</a></li>
 </ul>
 </ul>
 </li>
@@ -482,9 +483,34 @@ div.rendered_html tbody tr:hover {
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
- 11%|█▏        | 57/500 [00:00&lt;00:01, 284.43it/s]
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-11-41a7d0c0e681&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>my_portfolio<span class="ansi-blue-fg">.</span>design<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/riskparity.py/riskparityportfolio/rpp.py</span> in <span class="ansi-cyan-fg">design</span><span class="ansi-blue-fg">(self, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    185</span>             Dictionary of parameters to be passed to SuccessiveConvexOptimizer<span class="ansi-blue-fg">.</span>
+<span class="ansi-green-intense-fg ansi-bold">    186</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 187</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>sca <span class="ansi-blue-fg">=</span> SuccessiveConvexOptimizer<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    188</span>         self<span class="ansi-blue-fg">.</span>sca<span class="ansi-blue-fg">.</span>solve<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/dev/riskparity.py/riskparityportfolio/sca.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, portfolio, tau, gamma, zeta, funtol, wtol, maxiter)</span>
+<span class="ansi-green-intense-fg ansi-bold">    102</span>                                     np.eye(self.portfolio.number_of_assets))).T
+<span class="ansi-green-intense-fg ansi-bold">    103</span>         self<span class="ansi-blue-fg">.</span>bvec      <span class="ansi-blue-fg">=</span> np<span class="ansi-blue-fg">.</span>concatenate<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">(</span>np<span class="ansi-blue-fg">.</span>array<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1.</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>zeros<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>portfolio<span class="ansi-blue-fg">.</span>number_of_assets<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 104</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_funk <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>get_objective_function_value<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    105</span>         self<span class="ansi-blue-fg">.</span>objective_function <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>self<span class="ansi-blue-fg">.</span>_funk<span class="ansi-blue-fg">.</span>numpy<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>
+
+<span class="ansi-green-fg">~/dev/riskparity.py/riskparityportfolio/sca.py</span> in <span class="ansi-cyan-fg">get_objective_function_value</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span>     <span class="ansi-green-fg">def</span> get_objective_function_value<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 108</span><span class="ansi-red-fg">         </span>obj <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>portfolio<span class="ansi-blue-fg">.</span>risk_concentration<span class="ansi-blue-fg">.</span>evaluate<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>portfolio<span class="ansi-blue-fg">.</span>weights<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>portfolio<span class="ansi-blue-fg">.</span>has_mean_return<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    110</span>             obj <span class="ansi-blue-fg">-=</span> self<span class="ansi-blue-fg">.</span>portfolio<span class="ansi-blue-fg">.</span>mean_return
+
+<span class="ansi-red-fg">TypeError</span>: evaluate() takes 1 positional argument but 2 were given
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">

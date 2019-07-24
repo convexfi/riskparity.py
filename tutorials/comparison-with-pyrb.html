@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Minimal Usage &#8212; riskparity.py 0.1 documentation</title>
+    <title>Comparison with pyrb &#8212; riskparity.py 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -16,8 +16,7 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Including mean return and variance into the risk parity formulation" href="including-mean-return-and-variance.html" />
-    <link rel="prev" title="riskparity.py" href="../index.html" />
+    <link rel="prev" title="Including mean return and variance into the risk parity formulation" href="including-mean-return-and-variance.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -56,9 +55,9 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Minimal Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minimal-usage.html">Minimal Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="including-mean-return-and-variance.html">Including mean return and variance into the risk parity formulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comparison-with-pyrb.html">Comparison with pyrb</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Comparison with pyrb</a></li>
 </ul>
 </ul>
 </li>
@@ -72,7 +71,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Minimal Usage</a></li>
+<li><a class="reference internal" href="#">Comparison with pyrb</a></li>
 </ul>
 </ul>
 </li>
@@ -82,11 +81,7 @@
               
                 
   <li>
-    <a href="../index.html" title="Previous Chapter: riskparity.py"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; riskparity.py</span>
-    </a>
-  </li>
-  <li>
-    <a href="including-mean-return-and-variance.html" title="Next Chapter: Including mean return and variance into the risk parity formulation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Including mea... &raquo;</span>
+    <a href="including-mean-return-and-variance.html" title="Previous Chapter: Including mean return and variance into the risk parity formulation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Including mea...</span>
     </a>
   </li>
               
@@ -96,7 +91,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="../_sources/tutorials/minimal-usage.ipynb.txt"
+  <a href="../_sources/tutorials/comparison-with-pyrb.ipynb.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -320,74 +315,216 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Minimal-Usage">
-<h1>Minimal Usage<a class="headerlink" href="#Minimal-Usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Comparison-with-pyrb">
+<h1>Comparison with pyrb<a class="headerlink" href="#Comparison-with-pyrb" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">pyrb</span></code> package uses different formulations for the risk parity problem with general linear constraints and with the addition of objective terms such as the mean return and the volatility. Nonetheless, we can fairly compare with their code for the case where only the risk parity term is included and the constraints are <span class="math notranslate nohighlight">\(\texttt{sum}(\mathbf{w}) = 1\)</span> and <span class="math notranslate nohighlight">\(\mathbf{w} \geq 0\)</span>.</p>
+<p>Following the example shown at <a class="reference external" href="https://github.com/jcrichard/pyrb/blob/master/notebooks/RiskBudgeting.ipynb">https://github.com/jcrichard/pyrb/blob/master/notebooks/RiskBudgeting.ipynb</a>, we have:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">riskparityportfolio</span> <span class="k">as</span> <span class="nn">rp</span>
+<span></span><span class="kn">from</span> <span class="nn">pyrb</span> <span class="k">import</span> <span class="n">EqualRiskContribution</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">riskparityportfolio</span> <span class="k">as</span> <span class="nn">rpp</span>
 </pre></div>
 </div>
 </div>
-<p>In this notebook we show a very basic example where users may get to know the necessary building blocks to design a vanilla risk parity portfolio.</p>
-<p>Let’s start by assuming an universe of three assets with the following covariance matrix <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\boldsymbol{\Sigma} = \left[
-\begin{array}{ccc}
- 1.0000 &amp;  0.0015 &amp; -0.0119\\
- 0.0015 &amp;  1.0000 &amp; -0.0308\\
--0.0119 &amp; -0.0308 &amp;  1.0000
-\end{array}
-\right]\end{split}\]</div>
-<p>We would like to design a portfolio such that the relative risk contributions are given by the budgeting vector <span class="math notranslate nohighlight">\(\mathbf{b}\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\mathbf{b} = \left[
-\begin{array}{c}
- 0.1594 \\
- 0.0126 \\
- 0.8280
-\end{array}
-\right]\end{split}\]</div>
-<p>We can code those parameters as:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">Sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">1.0000</span><span class="p">,</span> <span class="mf">0.0015</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0119</span><span class="p">)),</span>
-                   <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.0015</span><span class="p">,</span> <span class="mf">1.0000</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0308</span><span class="p">)),</span>
-                   <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="o">-</span><span class="mf">0.0119</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0308</span><span class="p">,</span> <span class="mf">1.0000</span><span class="p">))))</span>
+<span></span><span class="n">covariance_matrix</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/jcrichard/pyrb/master/notebooks/data.csv&quot;</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span> <span class="o">*</span> <span class="mi">260</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">Sigma</span>
+<span></span><span class="n">covariance_matrix</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>US BONDS 10Y</th>
+      <th>GERMAN BONDS 10Y</th>
+      <th>S&amp;P 500</th>
+      <th>EUROSTOXX 50</th>
+      <th>NIKKEI</th>
+      <th>MSCI Emerging</th>
+      <th>Commodities (CRB)</th>
+      <th>Iboxx HY US</th>
+      <th>Iboxx HY EUR</th>
+      <th>Emerging Debt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>US BONDS 10Y</th>
+      <td>0.004116</td>
+      <td>0.002149</td>
+      <td>-0.003859</td>
+      <td>-0.005064</td>
+      <td>-0.004085</td>
+      <td>-0.003381</td>
+      <td>-0.001574</td>
+      <td>-0.000879</td>
+      <td>-0.000245</td>
+      <td>0.000484</td>
+    </tr>
+    <tr>
+      <th>GERMAN BONDS 10Y</th>
+      <td>0.002149</td>
+      <td>0.003150</td>
+      <td>-0.002809</td>
+      <td>-0.005692</td>
+      <td>-0.003468</td>
+      <td>-0.003604</td>
+      <td>-0.001310</td>
+      <td>-0.000996</td>
+      <td>-0.000262</td>
+      <td>0.000280</td>
+    </tr>
+    <tr>
+      <th>S&amp;P 500</th>
+      <td>-0.003859</td>
+      <td>-0.002809</td>
+      <td>0.042571</td>
+      <td>0.030959</td>
+      <td>0.029899</td>
+      <td>0.024753</td>
+      <td>0.008173</td>
+      <td>0.009952</td>
+      <td>0.000856</td>
+      <td>0.004332</td>
+    </tr>
+    <tr>
+      <th>EUROSTOXX 50</th>
+      <td>-0.005064</td>
+      <td>-0.005692</td>
+      <td>0.030959</td>
+      <td>0.064347</td>
+      <td>0.027036</td>
+      <td>0.031997</td>
+      <td>0.011019</td>
+      <td>0.009402</td>
+      <td>0.003169</td>
+      <td>0.006211</td>
+    </tr>
+    <tr>
+      <th>NIKKEI</th>
+      <td>-0.004085</td>
+      <td>-0.003468</td>
+      <td>0.029899</td>
+      <td>0.027036</td>
+      <td>0.060668</td>
+      <td>0.031786</td>
+      <td>0.009928</td>
+      <td>0.010870</td>
+      <td>0.001777</td>
+      <td>0.003836</td>
+    </tr>
+    <tr>
+      <th>MSCI Emerging</th>
+      <td>-0.003381</td>
+      <td>-0.003604</td>
+      <td>0.024753</td>
+      <td>0.031997</td>
+      <td>0.031786</td>
+      <td>0.058415</td>
+      <td>0.014405</td>
+      <td>0.011145</td>
+      <td>0.003468</td>
+      <td>0.007879</td>
+    </tr>
+    <tr>
+      <th>Commodities (CRB)</th>
+      <td>-0.001574</td>
+      <td>-0.001310</td>
+      <td>0.008173</td>
+      <td>0.011019</td>
+      <td>0.009928</td>
+      <td>0.014405</td>
+      <td>0.031496</td>
+      <td>0.005023</td>
+      <td>0.001489</td>
+      <td>0.002312</td>
+    </tr>
+    <tr>
+      <th>Iboxx HY US</th>
+      <td>-0.000879</td>
+      <td>-0.000996</td>
+      <td>0.009952</td>
+      <td>0.009402</td>
+      <td>0.010870</td>
+      <td>0.011145</td>
+      <td>0.005023</td>
+      <td>0.011670</td>
+      <td>0.001523</td>
+      <td>0.002549</td>
+    </tr>
+    <tr>
+      <th>Iboxx HY EUR</th>
+      <td>-0.000245</td>
+      <td>-0.000262</td>
+      <td>0.000856</td>
+      <td>0.003169</td>
+      <td>0.001777</td>
+      <td>0.003468</td>
+      <td>0.001489</td>
+      <td>0.001523</td>
+      <td>0.004500</td>
+      <td>0.001282</td>
+    </tr>
+    <tr>
+      <th>Emerging Debt</th>
+      <td>0.000484</td>
+      <td>0.000280</td>
+      <td>0.004332</td>
+      <td>0.006211</td>
+      <td>0.003836</td>
+      <td>0.007879</td>
+      <td>0.002312</td>
+      <td>0.002549</td>
+      <td>0.001282</td>
+      <td>0.008640</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([[ 1.    ,  0.0015, -0.0119],
-       [ 0.0015,  1.    , -0.0308],
-       [-0.0119, -0.0308,  1.    ]])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">covariance_matrix</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -396,7 +533,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.1594</span><span class="p">,</span> <span class="mf">0.0126</span><span class="p">,</span> <span class="mf">0.8280</span><span class="p">))</span>
+<span></span><span class="n">ERC</span> <span class="o">=</span> <span class="n">EqualRiskContribution</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -405,137 +542,104 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">b</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([0.1594, 0.0126, 0.828 ])
-</pre></div>
-</div>
-</div>
-<p>There are two ways to design our portfolio with the current building blocks:</p>
-<ol class="arabic simple">
-<li>using the <code class="docutils literal notranslate"><span class="pre">design</span></code> function from the <code class="docutils literal notranslate"><span class="pre">vanilla</span></code> module</li>
-<li>using the class <code class="docutils literal notranslate"><span class="pre">RiskParityPortfolio</span></code></li>
-</ol>
-<p>The first approach is as simple as</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">w</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">vanilla</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">w</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([0.2798628 , 0.08774909, 0.63238811])
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">rc</span> <span class="o">=</span> <span class="n">w</span> <span class="o">@</span> <span class="p">(</span><span class="n">Sigma</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span>
-<span class="n">rc</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rc</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([0.1594, 0.0126, 0.828 ])
-</pre></div>
-</div>
-</div>
-<p>Which is in fact our desired portfolio.</p>
-<p>The second approach goes as follows:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">my_portfolio</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">RiskParityPortfolio</span><span class="p">(</span><span class="n">covariance</span><span class="o">=</span><span class="n">Sigma</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">my_portfolio</span><span class="o">.</span><span class="n">design</span><span class="p">()</span>
+<span></span><span class="o">%</span><span class="k">timeit</span> ERC.solve()
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
- 11%|█▏        | 57/500 [00:00&lt;00:01, 284.43it/s]
+435 µs ± 76.3 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">my_portfolio</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span></span><span class="n">optimal_weights</span> <span class="o">=</span>  <span class="n">ERC</span><span class="o">.</span><span class="n">x</span>
+<span class="n">optimal_weights</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([0.27986272, 0.0877494 , 0.63238788])
+<span></span>array([0.22447775, 0.27514463, 0.03922505, 0.03589295, 0.03428179,
+       0.02991635, 0.05459806, 0.07111012, 0.15281389, 0.08253942])
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">my_portfolio</span><span class="o">.</span><span class="n">risk_contributions</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span></span><span class="n">risk_contributions_scaled</span> <span class="o">=</span>  <span class="n">ERC</span><span class="o">.</span><span class="n">get_risk_contributions</span><span class="p">()</span>
+<span class="n">risk_contributions_scaled</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>array([0.1594    , 0.01260011, 0.82799988])
+<span></span>array([0.09999997, 0.09999999, 0.10000001, 0.10000001, 0.1       ,
+       0.1       , 0.1       , 0.1       , 0.1       , 0.1       ])
 </pre></div>
 </div>
 </div>
-<p>The main difference between the two approaches is that the former works only for the vanilla risk parity (budgeting) problem, i.e.: the objective function to be minimized is the risk concentration only, and the constraints are <span class="math notranslate nohighlight">\(\mathbf{w} \geq \mathbf{0}\)</span> and <span class="math notranslate nohighlight">\(\texttt{sum}(\mathbf{w}) = 1\)</span>.</p>
-<p>The latter approach, however, allows for general linear constraints and the inclusion of additional objective terms such as the mean return and the volatility of the portfolio, as we will cover in the next tutorials.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cov</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">timeit</span> rpp.vanilla.design(cov, b)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+12.5 µs ± 1.4 µs per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">rpp</span><span class="o">.</span><span class="n">vanilla</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">cov</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([0.22447778, 0.27514462, 0.03922505, 0.03589295, 0.03428179,
+       0.02991635, 0.05459806, 0.07111011, 0.15281388, 0.08253942])
+</pre></div>
+</div>
+</div>
+<p>It seems that, for this example, <code class="docutils literal notranslate"><span class="pre">riskparityportfolio</span></code> is around <span class="math notranslate nohighlight">\(40\times\)</span> faster than <code class="docutils literal notranslate"><span class="pre">pyrb</span></code>. However, more examples are to be done in order to draw more conclusive results, especially on more interesting scenarios involving general linear constraints and additional objective terms such as the mean return.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
