@@ -58,6 +58,7 @@ References
 * F. Spinu, "An algorithm for computing risk parity weights", SSRN, 2013.
 * T. Griveau-Billion, J. Richard, and T. Roncalli, "A fast algorithm for computing high-dimensional risk parity portfolios" ArXiv preprint, 2013.
 * Y. Feng and D. P. Palomar, "SCRIP: Successive convex optimization methods for risk parity portfolios design" IEEE Trans. Signal Process., vol. 63, no. 19, pp. 5285–5300, Oct. 2015.
+* J. Richard, and T. Roncalli "Constrained Risk Budgeting Portfolios: Theory, Algorithms, Applications & Puzzles" (February 8, 2019). Available at SSRN: https://ssrn.com/abstract=3331184
 
 .. toctree::
    :maxdepth: 2
