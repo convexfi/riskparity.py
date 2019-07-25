@@ -87,8 +87,9 @@ class SuccessiveConvexOptimizer:
     """
     Successive Convex Approximation optimizer taylored for the risk parity problem.
     """
-    def __init__(self, portfolio, tau = None, gamma = 0.9, zeta = 1E-7, funtol = 1E-6,
-                 wtol = 1E-6, maxiter = 500):
+    def __init__(self, portfolio, tau = None, gamma = 0.9, zeta = 1E-7,
+                 funtol = 1E-6, wtol = 1E-6, maxiter = 500, Cmat = None,
+                 cvec = None, Dmat = None, dvec = None):
         self.portfolio = portfolio
         self.tau       = (tau or 0.05 * np.sum(np.diag(self.portfolio.covariance.numpy()))
                                  / (2 * self.portfolio.number_of_assets))
@@ -98,11 +99,71 @@ class SuccessiveConvexOptimizer:
         self.funtol    = sca_validator.funtol    = funtol
         self.wtol      = sca_validator.wtol      = wtol
         self.maxiter   = sca_validator.maxiter   = maxiter
-        self.Cmat      = np.vstack((np.ones(self.portfolio.number_of_assets),
-                                    np.eye(self.portfolio.number_of_assets))).T
-        self.bvec      = np.concatenate((np.array([1.]), np.zeros(self.portfolio.number_of_assets)))
+        self.Cmat      = Cmat
+        self.Dmat      = Dmat
+        self.cvec      = cvec
+        self.dvec      = dvec
+        self.CCmat     = np.vstack((self.Cmat, self.Dmat)).T
+        self.bvec      = np.concatenate((self.cvec, self.dvec))
+        self.meq       = self.Cmat.shape[0]
         self._funk = self.get_objective_function_value()
         self.objective_function = [self._funk.numpy()]
+
+    @property
+    def Cmat(self):
+        return self._Cmat
+
+    @Cmat.setter
+    def Cmat(self, value):
+        if value is None:
+            self._Cmat = np.atleast_2d(np.ones(self.portfolio.number_of_assets))
+        elif np.atleast_2d(value).shape[1] == self.portfolio.number_of_assets:
+            self._Cmat = np.atleast_2d(value)
+        else:
+            raise ValueError("Cmat shape {} doesnt agree with the number of"
+                             "assets {}".format(value.shape, self.number_of_assets))
+
+    @property
+    def Dmat(self):
+        return self._Dmat
+
+    @Dmat.setter
+    def Dmat(self, value):
+        if value is None:
+            self._Dmat = np.eye(self.portfolio.number_of_assets)
+        elif np.atleast_2d(value).shape[1] == self.portfolio.number_of_assets:
+            self._Dmat = -np.atleast_2d(value)
+        else:
+            raise ValueError("Dmat shape {} doesnt agree with the number of"
+                             "assets {}".format(value.shape, self.number_of_assets))
+
+    @property
+    def cvec(self):
+        return self._cvec
+
+    @cvec.setter
+    def cvec(self, value):
+        if value is None:
+            self._cvec = np.array([1])
+        elif len(value) == self.Cmat.shape[0]:
+            self._cvec = value
+        else:
+            raise ValueError("cvec shape {} doesnt agree with Cmat shape"
+                             "{}".format(value.shape, self.Cmat.shape))
+
+    @property
+    def dvec(self):
+        return self._dvec
+
+    @dvec.setter
+    def dvec(self, value):
+        if value is None:
+            self._dvec = np.zeros(self.portfolio.number_of_assets)
+        elif len(value) == self.Dmat.shape[0]:
+            self._dvec = -value
+        else:
+            raise ValueError("dvec shape {} doesnt agree with Dmat shape"
+                             "{}".format(value.shape, self.Dmat.shape))
 
     def get_objective_function_value(self):
         obj = self.portfolio.risk_concentration.evaluate()
@@ -123,7 +184,7 @@ class SuccessiveConvexOptimizer:
             Q += self.portfolio.lmd * self.portfolio.covariance
         if self.portfolio.has_mean_return:
             q -= self.portfolio.alpha * self.portfolio.mean
-        w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.Cmat, b=self.bvec, meq=1)[0]
+        w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.CCmat, b=self.bvec, meq=self.meq)[0]
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
         fun_next = self.get_objective_function_value()
         self.objective_function.append(fun_next.numpy())
