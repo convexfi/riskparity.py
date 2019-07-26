@@ -130,7 +130,7 @@ The algorithms are based on the works of Spinu (2013), Griveau-Billion <em>et. a
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{array}{ll}
 \underset{\mathbf{w}}{\textsf{minimize}} &amp;
-R(\mathbf{w}) - \alpha \mathbf{w}^{\top}\boldsymbol{\mu} + \beta \mathbf{w}^{\top}\boldsymbol{\Sigma}\mathbf{w}\\
+R(\mathbf{w}) - \alpha \mathbf{w}^{\top}\boldsymbol{\mu} + \lambda \mathbf{w}^{\top}\boldsymbol{\Sigma}\mathbf{w}\\
 \textsf{subject to} &amp; \mathbf{C}\mathbf{w} = \mathbf{c}, \mathbf{D}\mathbf{w} \leq \mathbf{d}
 \end{array}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(R\)</span> is a risk concentration function.</p>

@@ -15,7 +15,7 @@ We consider the following optimization problem and its particular cases
 
         \begin{array}{ll}
         \underset{\mathbf{w}}{\textsf{minimize}} &
-        R(\mathbf{w}) - \alpha \mathbf{w}^{\top}\boldsymbol{\mu} + \beta \mathbf{w}^{\top}\boldsymbol{\Sigma}\mathbf{w}\\
+        R(\mathbf{w}) - \alpha \mathbf{w}^{\top}\boldsymbol{\mu} + \lambda \mathbf{w}^{\top}\boldsymbol{\Sigma}\mathbf{w}\\
         \textsf{subject to} & \mathbf{C}\mathbf{w} = \mathbf{c}, \mathbf{D}\mathbf{w} \leq \mathbf{d}
         \end{array}
 
