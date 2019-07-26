@@ -10,7 +10,7 @@ __version__ = '0.0.9dev'
 if "release" in sys.argv[-1]:
     os.system("python setup.py sdist")
     os.system("twine upload dist/*")
-    os.system("rm -rf dist/lightkurve*")
+    os.system("rm -rf dist/riskparityportfolio*")
     sys.exit()
 
 
