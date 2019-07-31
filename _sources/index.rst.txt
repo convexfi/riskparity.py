@@ -30,7 +30,7 @@ $ pip install riskparityportfolio
 
 Its *development* version can be installed as::
 
-$ git clone https://github.com/mirca/riskparity.py
+$ git clone https://github.com/dppalomar/riskparity.py
 $ cd riskparity.py
 $ pip install -e .
 
