@@ -1,4 +1,5 @@
 import tensorflow as tf
+from lincon import qp
 import numpy as np
 import quadprog
 from tqdm import tqdm
@@ -185,6 +186,9 @@ class SuccessiveConvexOptimizer:
         if self.portfolio.has_mean_return:
             q -= self.portfolio.alpha * self.portfolio.mean
         w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.CCmat, b=self.bvec, meq=self.meq)[0]
+        #w_hat = qp.solve(Qmat=Q.numpy(), qvec=q.numpy(), Cmat=self.Cmat, cvec=self.cvec,
+        #                 Dmat=self.Dmat, dvec=self.dvec, w0=wk, maxiter=self.maxiter,
+        #                 tol=self.wtol)
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
         fun_next = self.get_objective_function_value()
         self.objective_function.append(fun_next.numpy())
