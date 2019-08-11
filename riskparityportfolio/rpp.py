@@ -110,7 +110,7 @@ class RiskParityPortfolio:
     @budget.setter
     def budget(self, value):
         if value is None:
-            self._budget = tf.ones(self.number_of_assets) / self.number_of_assets
+            self._budget = tf.ones(self.number_of_assets, dtype=tf.float64) / self.number_of_assets
         else:
             try:
                 self._budget = tf.convert_to_tensor(value)
