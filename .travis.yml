@@ -24,6 +24,7 @@ before_install:
   - pip install pytest-cov
   - pip install codecov
   - pip install quadprog
+  - pip install lincon
   - pip install tensorflow==2.0.0-beta1
 install:
   - python setup.py develop
