@@ -1,5 +1,4 @@
 import tensorflow as tf
-from lincon import qp
 import numpy as np
 import quadprog
 from tqdm import tqdm
