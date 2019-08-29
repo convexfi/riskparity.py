@@ -14,6 +14,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Comparison with pyrb" href="comparison-with-pyrb.html" />
@@ -302,7 +304,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>In this notebook we will check out the necessary interface to take into account the mean return and the variance while optimizing risk parity portfolios.</p>
+<p>In this notebook, we will check out the necessary interface to take into account the mean return and the variance while optimizing risk parity portfolios.</p>
 <div class="section" id="Adding-the-mean-return">
 <h2>Adding the mean return<a class="headerlink" href="#Adding-the-mean-return" title="Permalink to this headline">¶</a></h2>
 <p><strong>riskparity.py</strong> allows users to account for the mean return of the designed portfolio, i.e., we solve the following optimization problem:</p>
