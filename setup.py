@@ -38,7 +38,7 @@ ext_modules = [
             get_pybind_include(),
             get_pybind_include(user=True)
         ],
-        extra_link_args=["-stdlib=libc++"],
+#        extra_link_args=["-stdlib=libc++"],
         language='c++'
     ),
 ]
