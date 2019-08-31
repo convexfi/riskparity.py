@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os
 
-__version__ = '0.0.9dev'
+__version__ = '0.1.0dev'
 
 # Prepare and send a new release to PyPI
 if "release" in sys.argv[-1]:
