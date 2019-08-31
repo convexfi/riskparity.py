@@ -2,8 +2,8 @@ language: cpp
 dist: trusty
 matrix:
   include:
-# - os: linux
-#   env: CONDA=3.6
+  - os: linux
+    env: CONDA=3.6
   - os: osx
     env: CONDA=3.6
 before_install:
