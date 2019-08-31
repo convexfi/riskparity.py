@@ -108,6 +108,7 @@ class SuccessiveConvexOptimizer:
         self.meq       = self.Cmat.shape[0]
         self._funk = self.get_objective_function_value()
         self.objective_function = [self._funk.numpy()]
+        self._tauI = self.tau * tf.eye(self.portfolio.number_of_assets, dtype=tf.float64)
 
     @property
     def Cmat(self):
@@ -168,9 +169,9 @@ class SuccessiveConvexOptimizer:
     def get_objective_function_value(self):
         obj = self.portfolio.risk_concentration.evaluate()
         if self.portfolio.has_mean_return:
-            obj -= self.portfolio.mean_return
+            obj -= self.portfolio.alpha * self.portfolio.mean_return
         if self.portfolio.has_variance:
-            obj += self.portfolio.variance
+            obj += self.portfolio.lmd * self.portfolio.variance
         return obj
 
     def iterate(self):
@@ -178,7 +179,7 @@ class SuccessiveConvexOptimizer:
         g = self.portfolio.risk_concentration.risk_concentration_vector()
         A = self.portfolio.risk_concentration.jacobian_risk_concentration_vector()
         At = tf.transpose(A)
-        Q = 2 * At @ A + self.tau * tf.eye(self.portfolio.number_of_assets, dtype=tf.float64)
+        Q = 2 * At @ A + self._tauI
         q = 2 * tf.linalg.matvec(At, g) - tf.linalg.matvec(Q, wk)
         if self.portfolio.has_variance:
             Q += self.portfolio.lmd * self.portfolio.covariance
