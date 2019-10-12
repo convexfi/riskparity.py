@@ -17,6 +17,11 @@ method proposed by [Feng & Palomar (2015)](https://doi.org/10.1109/TSP.2015.2452
 
 **R version:** [**https://mirca.github.io/riskParityPortfolio**](https://mirca.github.io/riskParityPortfolio)
 
+## Installation
+
+``pip install riskparityportfolio``
+
+
 ## License
 
 Copyright 2019 Ze Vinicius and Daniel Palomar
