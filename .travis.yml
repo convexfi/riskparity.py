@@ -22,7 +22,7 @@ before_install:
   - pip install Cython
   - python -m pip install 'pybind11>=2.3'
   - pip install pytest-cov
-  - pip install codecov
+  - pip install codecov --ignore-installed certifi
   - pip install quadprog
   - pip install tensorflow==2.0.0
 install:

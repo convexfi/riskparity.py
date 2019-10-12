@@ -118,7 +118,7 @@ setup(
     version=__version__,
     author='Ze Vinicius & Dan Palomar',
     author_email='jvmirca@gmail.com',
-    url='https://github.com/dppalomar/riskParityPortfolio',
+    url='https://github.com/dppalomar/riskparity.py',
     description='Blazingly fast design of risk parity portfolios',
     long_description='',
     ext_modules=ext_modules,

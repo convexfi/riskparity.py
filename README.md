@@ -19,7 +19,11 @@ method proposed by [Feng & Palomar (2015)](https://doi.org/10.1109/TSP.2015.2452
 
 ## Installation
 
-``pip install riskparityportfolio``
+```
+$ git clone https://github.com/dppalomar/riskparity.py.git
+$ cd riskparity.py
+$ python setup.py install
+```
 
 
 ## License
