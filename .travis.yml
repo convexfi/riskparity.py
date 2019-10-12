@@ -24,7 +24,7 @@ before_install:
   - pip install pytest-cov
   - pip install codecov
   - pip install quadprog
-  - pip install tensorflow==2.0.0-beta1
+  - pip install tensorflow==2.0.0
 install:
   - python setup.py develop
 
