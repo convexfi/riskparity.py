@@ -26,7 +26,7 @@ class RiskParityPortfolio:
     covariance : array, shape=(n, n)
         covariance matrix of the assets
     budget : array, shape=(n,)
-        budget vector
+        risk budget vector
     equality_constraints : string
         the equality constraint expression
     inequality_constraints : string
