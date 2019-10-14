@@ -3,9 +3,9 @@ dist: trusty
 matrix:
   include:
   - os: linux
-    env: CONDA=3.6
+    env: CONDA=3.7
   - os: osx
-    env: CONDA=3.6
+    env: CONDA=3.7
 before_install:
   - |
     if [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX=g++-4.8 CC=gcc-4.8; fi
@@ -24,7 +24,7 @@ before_install:
   - pip install pytest-cov
   - pip install codecov --ignore-installed certifi
   - pip install quadprog
-  - pip install tensorflow==2.0.0
+  - pip install tensorflow
 install:
   - python setup.py develop
 
