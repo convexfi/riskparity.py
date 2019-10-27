@@ -6,7 +6,7 @@
 #### Example
 <!-- Provide a link or minimal code snippet that demonstrates the issue. -->
 ```python
-import riksparityportfolio
+import riskparityportfolio
 # insert code here ...
 ```
 
