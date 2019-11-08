@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os
 
-__version__ = '0.1.2'
+__version__ = "0.1.3"
 
 # Prepare and send a new release to PyPI
 if "release" in sys.argv[-1]:
@@ -12,7 +12,6 @@ if "release" in sys.argv[-1]:
     os.system("twine upload dist/*")
     os.system("rm -rf dist/riskparityportfolio*")
     sys.exit()
-
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
