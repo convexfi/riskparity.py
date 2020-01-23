@@ -62,7 +62,7 @@ class RiskParityPortfolio:
             raise ValueError("the portfolio mean has not been specified, please use add_mean_return")
 
     @property
-    def variance(self):
+    def volatility(self):
         return tf.sqrt(tf.tensordot(self.weights,
                                     tf.linalg.matvec(self.covariance,
                                                      self.weights), axes=1))

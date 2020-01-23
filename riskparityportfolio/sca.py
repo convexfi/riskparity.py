@@ -85,7 +85,7 @@ class SuccessiveConvexOptimizerValidator:
 
 class SuccessiveConvexOptimizer:
     """
-    Successive Convex Approximation optimizer taylored for the risk parity problem.
+    Successive Convex Approximation optimizer tailored for the risk parity problem.
     """
     def __init__(self, portfolio, tau = None, gamma = 0.9, zeta = 1E-7,
                  funtol = 1E-6, wtol = 1E-6, maxiter = 500, Cmat = None,
