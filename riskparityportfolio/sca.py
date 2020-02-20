@@ -1,8 +1,12 @@
 import tensorflow as tf
 import numpy as np
-import quadprog
 from tqdm import tqdm
-
+try:
+    import quadprog
+except ImportError:
+    import warnings
+    warnings.warn("not able to import quadprog."
+                  " the successive convex optimizer wont work.")
 
 __all__ = ['SuccessiveConvexOptimizer']
 
