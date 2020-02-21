@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 # Prepare and send a new release to PyPI
 if "release" in sys.argv[-1]:
@@ -85,7 +85,7 @@ class BuildExt(build_ext):
         'unix': [],
     }
     if sys.platform == 'darwin':
-        darwin_opts = ['-stdlib=libc++', '-mmacosx-version-min=10.7']
+        darwin_opts = ['-stdlib=libc++', '-mmacosx-version-min=10.9']
         c_opts['unix'] += darwin_opts
         l_opts['unix'] += darwin_opts
 
