@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 # Prepare and send a new release to PyPI
 if "release" in sys.argv[-1]:
@@ -122,6 +122,9 @@ setup(
     author_email='jvmirca@gmail.com',
     url='https://github.com/dppalomar/riskparity.py',
     description='Blazingly fast design of risk parity portfolios',
+    license='MIT',
+    package_dir={'riskparityportfolio' : 'riskparityportfolio'},
+    packages=['riskparityportfolio'],
     long_description='',
     ext_modules=ext_modules,
     install_requires=['pybind11>=2.4', 'numpy', 'tensorflow', 'quadprog', 'tqdm'],
