@@ -175,7 +175,7 @@ class SuccessiveConvexOptimizer:
         if self.portfolio.has_mean_return:
             obj -= self.portfolio.alpha * self.portfolio.mean_return
         if self.portfolio.has_variance:
-            obj += self.portfolio.lmd * self.portfolio.variance
+            obj += self.portfolio.lmd * self.portfolio.volatility ** 2
         return obj
 
     def iterate(self):
