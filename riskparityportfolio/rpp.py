@@ -2,7 +2,8 @@ import warnings
 import tensorflow as tf
 import numpy as np
 from .sca import SuccessiveConvexOptimizer
-from .riskfunctions import RiskContribOverBudgetDoubleIndex, RiskContribOverVarianceMinusBudget
+from .riskfunctions import RiskContribOverBudgetDoubleIndex, RiskContribOverVarianceMinusBudget, RiskConcentrationFunction
+from .vanilla import design as design_vanilla
 
 
 __all__ = ['RiskParityPortfolio']
@@ -78,7 +79,7 @@ class RiskParityPortfolio:
     @weights.setter
     def weights(self, value):
         if value is None:
-            self._weights = tf.ones(self.number_of_assets, dtype=tf.float64) / self.number_of_assets
+            self._weights = design_vanilla(self.covariance, self.budget)
         else:
             try:
                 self._weights = tf.convert_to_tensor(value)
@@ -97,10 +98,10 @@ class RiskParityPortfolio:
     def risk_concentration(self, value):
         if value is None:
             self._risk_concentration = RiskContribOverVarianceMinusBudget(self)
-        elif isinstance(value, RiskConcetrationFunction):
+        elif issubclass(value, RiskConcentrationFunction):
             self._risk_concentration = value(self)
         else:
-            raise ValueError("risk_concentration {} is not a valid child class"
+            raise ValueError("risk_concentration {} is not a valid child class "
                              "of RiskConcentrationFunction".format(value))
 
     @property
