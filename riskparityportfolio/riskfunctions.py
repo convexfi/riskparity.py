@@ -1,20 +1,20 @@
 import jax.numpy as np
-from jax import grad, jit
+from jax import grad, jit, jacfwd
 
 class RiskConcentrationFunction:
     def __init__(self, portfolio):
         self.portfolio = portfolio
 
-    def evaluate(self):
-        return np.sum(np.square(self.risk_concentration_vector()))
+    def evaluate(self, portfolio_weights):
+        return np.sum(np.square(self.risk_concentration_vector(portfolio_weights)))
 
     # the vector g in Feng & Palomar 2015
     def risk_concentration_vector(self, portfolio_weights):
         raise NotImplementedError("this method should be implemented in the child class")
 
     # jacobian of the vector function risk_concentration_vector with respect to weights
-    def jacobian_risk_concentration_vector(self):
-        return jit(grad(risk_concentration_vector(argnums=1)))
+    def jacobian_risk_concentration_vector(self, portfolio_weights):
+        return jacfwd(self.risk_concentration_vector)(portfolio_weights)
 
 class RiskContribOverBudgetDoubleIndex(RiskConcentrationFunction):
     def risk_concentration_vector(self, portfolio_weights):

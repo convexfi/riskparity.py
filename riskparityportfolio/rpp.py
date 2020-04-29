@@ -1,5 +1,5 @@
 import warnings
-import jax.numpy as np
+import numpy as np
 from .sca import SuccessiveConvexOptimizer
 from .riskfunctions import RiskContribOverBudgetDoubleIndex, RiskContribOverVarianceMinusBudget, RiskConcentrationFunction
 from .vanilla import design as design_vanilla
@@ -129,7 +129,7 @@ class RiskParityPortfolio:
                 self._covariance = np.atleast_2d(value)
             except Exception as e:
                 raise e
-            eigvals = np.linalg.eigvals(self._covariance.numpy())
+            eigvals = np.linalg.eigvals(self._covariance)
             eigvals = np.sort(eigvals)
             if abs(eigvals[0] / eigvals[-1]) < 1e-6:
                 warnings.warn("covariance matrix maybe singular")

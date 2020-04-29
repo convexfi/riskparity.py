@@ -1,4 +1,4 @@
-import jax.numpy as np
+import numpy as np
 from tqdm import tqdm
 try:
     import quadprog
@@ -112,8 +112,8 @@ class SuccessiveConvexOptimizer:
         self._funk = self.get_objective_function_value()
         self.objective_function = [self._funk]
         self._tauI = self.tau * np.eye(self.portfolio.number_of_assets)
-        self.Amat = self.portfolio.risk_concentration.jacobian_risk_concentration_vector()
-        self.gvec = self.portfolio.risk_concentration.risk_concentration_vector()
+        self.Amat = self.portfolio.risk_concentration.jacobian_risk_concentration_vector
+        self.gvec = self.portfolio.risk_concentration.risk_concentration_vector
 
     @property
     def Cmat(self):
@@ -172,7 +172,7 @@ class SuccessiveConvexOptimizer:
                              "{}".format(value.shape, self.Dmat.shape))
 
     def get_objective_function_value(self):
-        obj = self.portfolio.risk_concentration.evaluate()
+        obj = self.portfolio.risk_concentration.evaluate(self.portfolio.weights)
         if self.portfolio.has_mean_return:
             obj -= self.portfolio.alpha * self.portfolio.mean_return
         if self.portfolio.has_variance:
@@ -182,7 +182,7 @@ class SuccessiveConvexOptimizer:
     def iterate(self):
         wk = self.portfolio.weights
         g = self.gvec(wk)
-        A = self.Amat(wk)
+        A = np.ascontiguousarray(self.Amat(wk))
         At = np.transpose(A)
         Q = 2 * At @ A + self._tauI
         q = 2 * np.matmul(At, g) - np.matmul(Q, wk)
@@ -190,16 +190,16 @@ class SuccessiveConvexOptimizer:
             Q += self.portfolio.lmd * self.portfolio.covariance
         if self.portfolio.has_mean_return:
             q -= self.portfolio.alpha * self.portfolio.mean
-        w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.CCmat, b=self.bvec, meq=self.meq)[0]
+        w_hat = quadprog.solve_qp(Q, -q, C=self.CCmat, b=self.bvec, meq=self.meq)[0]
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
         fun_next = self.get_objective_function_value()
-        self.objective_function.append(fun_next.numpy())
+        self.objective_function.append(fun_next)
         has_w_converged = (np.abs(self.portfolio.weights - wk) <=
                            .5 * self.wtol * (np.abs(self.portfolio.weights) +
-                                             np.abs(wk))).numpy().all()
+                                             np.abs(wk))).all()
         has_fun_converged = (np.abs(self._funk - fun_next) <=
                              .5 * self.funtol * (np.abs(self._funk) +
-                                                 np.abs(fun_next))).numpy().all()
+                                                 np.abs(fun_next))).all()
         if has_w_converged or has_fun_converged:
             return False
         self.gamma = self.gamma * (1 - self.zeta * self.gamma)
