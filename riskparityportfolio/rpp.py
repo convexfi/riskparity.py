@@ -1,6 +1,5 @@
 import warnings
-import tensorflow as tf
-import numpy as np
+import jax.numpy as np
 from .sca import SuccessiveConvexOptimizer
 from .riskfunctions import RiskContribOverBudgetDoubleIndex, RiskContribOverVarianceMinusBudget, RiskConcentrationFunction
 from .vanilla import design as design_vanilla
@@ -52,7 +51,7 @@ class RiskParityPortfolio:
         self.has_mean_return = False
 
     def get_diag_solution(self):
-        w = np.sqrt(self.budget.numpy()) / np.sqrt(np.diagonal(self.covariance.numpy()))
+        w = np.sqrt(self.budget / np.diagonal(self.covariance))
         return w / w.sum()
 
     @property
@@ -68,7 +67,7 @@ class RiskParityPortfolio:
 
     @property
     def risk_contributions(self):
-        rc = np.dot(self.weights, np.multiply(self.covariance, self.weights))
+        rc = self.weights * np.matmul(self.covariance, self.weights)
         return rc / np.sum(rc)
 
     @property
@@ -81,7 +80,7 @@ class RiskParityPortfolio:
             self._weights = design_vanilla(self.covariance, self.budget)
         else:
             try:
-                self._weights = np.ascontiguousarray(value)
+                self._weights = np.atleast_1d(value)
             except Exception as e:
                 raise e
 
@@ -113,7 +112,7 @@ class RiskParityPortfolio:
             self._budget = np.ones(self.number_of_assets) / self.number_of_assets
         else:
             try:
-                self._budget = np.ascontiguousarray(value)
+                self._budget = np.atleast_1d(value)
             except Exception as e:
                 raise e
 
@@ -127,7 +126,7 @@ class RiskParityPortfolio:
             raise ValueError("shape mismatch: covariance matrix is not a square matrix")
         else:
             try:
-                self._covariance = np.ascontiguousarray(value)
+                self._covariance = np.atleast_2d(value)
             except Exception as e:
                 raise e
             eigvals = np.linalg.eigvals(self._covariance.numpy())
