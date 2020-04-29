@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os
 
-__version__ = "0.1.6"
+__version__ = "0.2"
 
 # Prepare and send a new release to PyPI
 if "release" in sys.argv[-1]:
@@ -118,7 +118,7 @@ class BuildExt(build_ext):
 setup(
     name='riskparityportfolio',
     version=__version__,
-    author='Ze Vinicius & Dan Palomar',
+    author='Ze Vinicius & Dani Palomar',
     author_email='jvmirca@gmail.com',
     url='https://github.com/dppalomar/riskparity.py',
     description='Blazingly fast design of risk parity portfolios',
@@ -127,8 +127,8 @@ setup(
     packages=['riskparityportfolio'],
     long_description='',
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.4', 'numpy', 'tensorflow', 'quadprog', 'tqdm'],
-    setup_requires=['pybind11>=2.4', 'numpy', 'tensorflow', 'quadprog', 'tqdm'],
+    install_requires=['pybind11>=2.4', 'numpy', 'jax', 'quadprog', 'tqdm'],
+    setup_requires=['pybind11>=2.4', 'numpy', 'jax', 'quadprog', 'tqdm'],
     cmdclass={'build_ext': BuildExt},
     classifiers=[
     'Development Status :: 3 - Alpha',
