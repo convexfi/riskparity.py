@@ -24,6 +24,7 @@ before_install:
   - pip install pytest-cov
   - pip install codecov --ignore-installed certifi
   - pip install quadprog
+  - pip install jaxlib
   - pip install jax
 install:
   - python setup.py develop
