@@ -94,7 +94,7 @@ class SuccessiveConvexOptimizer:
                  funtol = 1E-6, wtol = 1E-6, maxiter = 500, Cmat = None,
                  cvec = None, Dmat = None, dvec = None):
         self.portfolio = portfolio
-        self.tau       = (tau or 0.05 * np.sum(np.diag(self.portfolio.covariance.numpy()))
+        self.tau       = (tau or 0.05 * np.sum(np.diag(self.portfolio.covariance))
                                  / (2 * self.portfolio.number_of_assets))
         sca_validator  = SuccessiveConvexOptimizerValidator()
         self.gamma     = sca_validator.gamma     = gamma
@@ -110,7 +110,7 @@ class SuccessiveConvexOptimizer:
         self.bvec      = np.concatenate((self.cvec, self.dvec))
         self.meq       = self.Cmat.shape[0]
         self._funk = self.get_objective_function_value()
-        self.objective_function = [self._funk.numpy()]
+        self.objective_function = [self._funk]
         self._tauI = self.tau * np.eye(self.portfolio.number_of_assets)
         self.Amat = self.portfolio.risk_concentration.jacobian_risk_concentration_vector()
         self.gvec = self.portfolio.risk_concentration.risk_concentration_vector()
@@ -150,7 +150,7 @@ class SuccessiveConvexOptimizer:
     @cvec.setter
     def cvec(self, value):
         if value is None:
-            self._cvec = np.array([1])
+            self._cvec = np.array([1.])
         elif len(value) == self.Cmat.shape[0]:
             self._cvec = value
         else:
@@ -166,7 +166,7 @@ class SuccessiveConvexOptimizer:
         if value is None:
             self._dvec = np.zeros(self.portfolio.number_of_assets)
         elif len(value) == self.Dmat.shape[0]:
-            self._dvec = -value
+            self._dvec = -np.atleast_1d(value)
         else:
             raise ValueError("dvec shape {} doesnt agree with Dmat shape"
                              "{}".format(value.shape, self.Dmat.shape))
@@ -191,9 +191,6 @@ class SuccessiveConvexOptimizer:
         if self.portfolio.has_mean_return:
             q -= self.portfolio.alpha * self.portfolio.mean
         w_hat = quadprog.solve_qp(Q.numpy(), -q.numpy(), C=self.CCmat, b=self.bvec, meq=self.meq)[0]
-        #w_hat = qp.solve(Qmat=Q.numpy(), qvec=q.numpy(), Cmat=self.Cmat, cvec=self.cvec,
-        #                 Dmat=self.Dmat, dvec=self.dvec, w0=wk, maxiter=self.maxiter,
-        #                 tol=self.wtol)
         self.portfolio.weights = wk + self.gamma * (w_hat - wk)
         fun_next = self.get_objective_function_value()
         self.objective_function.append(fun_next.numpy())
