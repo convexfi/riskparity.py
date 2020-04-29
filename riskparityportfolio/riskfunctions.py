@@ -19,14 +19,12 @@ class RiskConcentrationFunction:
 class RiskContribOverBudgetDoubleIndex(RiskConcentrationFunction):
     def risk_concentration_vector(self, portfolio_weights):
         N = len(portfolio_weights)
-        marginal_risk = np.multiply(portfolio_weights,
-                np.matmul(self.portfolio.covariance, portfolio_weights))
+        marginal_risk = portfolio_weights * (self.portfolio.covariance @ portfolio_weights)
         normalized_marginal_risk = marginal_risk / self.portfolio.budget
-        return np.tile(normalized_marginal_risk, [N]) - repeat(normalized_marginal_risk, N)
+        return np.tile(normalized_marginal_risk, N) - np.repeat(normalized_marginal_risk, N)
 
 
 class RiskContribOverVarianceMinusBudget(RiskConcentrationFunction):
     def risk_concentration_vector(self, portfolio_weights):
-        marginal_risk = np.multiply(self.portfolio.weights,
-                np.matmul(self.portfolio.covariance, portfolio_weights))
+        marginal_risk = portfolio_weights * (self.portfolio.covariance @ portfolio_weights)
         return marginal_risk / np.sum(marginal_risk) - self.portfolio.budget
