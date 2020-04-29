@@ -130,8 +130,8 @@ class RiskParityPortfolio:
             except Exception as e:
                 raise e
             eigvals = np.linalg.eigvals(self._covariance)
-            eigvals = np.sort(eigvals)
-            if abs(eigvals[0] / eigvals[-1]) < 1e-6:
+            abs_eigvals = np.abs(eigvals)
+            if np.max(abs_eigvals) / np.min(abs_eigvals) < 1e-6:
                 warnings.warn("covariance matrix maybe singular")
 
     @property
