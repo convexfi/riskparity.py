@@ -13,8 +13,8 @@ class RiskConcentrationFunction:
         raise NotImplementedError("this method should be implemented in the child class")
 
     # jacobian of the vector function risk_concentration_vector with respect to weights
-    def jacobian_risk_concentration_vector(self, portfolio_weights):
-        return jit(jacfwd(self.risk_concentration_vector))(portfolio_weights)
+    def jacobian_risk_concentration_vector(self):
+        return jit(jacfwd(self.risk_concentration_vector))
 
 class RiskContribOverBudgetDoubleIndex(RiskConcentrationFunction):
     def risk_concentration_vector(self, portfolio_weights):

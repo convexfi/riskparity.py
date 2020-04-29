@@ -112,7 +112,7 @@ class SuccessiveConvexOptimizer:
         self._funk = self.get_objective_function_value()
         self.objective_function = [self._funk]
         self._tauI = self.tau * np.eye(self.portfolio.number_of_assets)
-        self.Amat = self.portfolio.risk_concentration.jacobian_risk_concentration_vector
+        self.Amat = self.portfolio.risk_concentration.jacobian_risk_concentration_vector()
         self.gvec = self.portfolio.risk_concentration.risk_concentration_vector
 
     @property
