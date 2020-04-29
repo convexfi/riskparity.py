@@ -37,7 +37,7 @@ $ pip install -e .
 Dependencies
 ------------
 
-**riskparity.py** is built on top of **numpy**, **tensorflow2.0**, **quadprog**, **pybind**, and **tqdm**.
+**riskparity.py** is built on top of **numpy**, **jax**, **quadprog**, **pybind**, and **tqdm**.
 
 R Version
 ---------
