@@ -8,3 +8,4 @@ var/
 .coverage
 docs/source/tutorials/.ipynb_checkpoints/*
 .eggs/
+.ipynb_checkpoints/*

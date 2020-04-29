@@ -1,5 +1,4 @@
 import warnings
-import tensorflow as tf
 import numpy as np
 from .sca import SuccessiveConvexOptimizer
 from .riskfunctions import RiskContribOverBudgetDoubleIndex, RiskContribOverVarianceMinusBudget, RiskConcentrationFunction
@@ -52,25 +51,24 @@ class RiskParityPortfolio:
         self.has_mean_return = False
 
     def get_diag_solution(self):
-        w = np.sqrt(self.budget.numpy()) / np.sqrt(np.diagonal(self.covariance.numpy()))
+        w = np.sqrt(self.budget / np.diagonal(self.covariance))
         return w / w.sum()
 
     @property
     def mean_return(self):
         if self.has_mean_return:
-            return tf.tensordot(self.weights, self.mean, axes=1)
+            return np.dot(self.weights, self.mean)
         else:
             raise ValueError("the portfolio mean has not been specified, please use add_mean_return")
 
     @property
     def volatility(self):
-        return tf.sqrt(tf.tensordot(self.weights,
-                                    tf.linalg.matvec(self.covariance,
-                                                     self.weights), axes=1))
+        return np.sqrt(np.dot(self.weights, np.matmul(self.covariance, self.weights)))
+
     @property
     def risk_contributions(self):
-        rc = tf.tensordot(self.weights, tf.multiply(self.covariance, self.weights), axes=1)
-        return rc / tf.reduce_sum(rc)
+        rc = self.weights * np.matmul(self.covariance, self.weights)
+        return rc / np.sum(rc)
 
     @property
     def weights(self):
@@ -82,7 +80,7 @@ class RiskParityPortfolio:
             self._weights = design_vanilla(self.covariance, self.budget)
         else:
             try:
-                self._weights = tf.convert_to_tensor(value)
+                self._weights = np.atleast_1d(value)
             except Exception as e:
                 raise e
 
@@ -111,10 +109,10 @@ class RiskParityPortfolio:
     @budget.setter
     def budget(self, value):
         if value is None:
-            self._budget = tf.ones(self.number_of_assets, dtype=tf.float64) / self.number_of_assets
+            self._budget = np.ones(self.number_of_assets) / self.number_of_assets
         else:
             try:
-                self._budget = tf.convert_to_tensor(value)
+                self._budget = np.atleast_1d(value)
             except Exception as e:
                 raise e
 
@@ -128,10 +126,10 @@ class RiskParityPortfolio:
             raise ValueError("shape mismatch: covariance matrix is not a square matrix")
         else:
             try:
-                self._covariance = tf.convert_to_tensor(value)
+                self._covariance = np.atleast_2d(value)
             except Exception as e:
                 raise e
-            eigvals = np.linalg.eigvals(self._covariance.numpy())
+            eigvals = np.linalg.eigvals(self._covariance)
             eigvals = np.sort(eigvals)
             if abs(eigvals[0] / eigvals[-1]) < 1e-6:
                 warnings.warn("covariance matrix maybe singular")
