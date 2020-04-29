@@ -12,4 +12,4 @@ def test_on_tricky_example():
     rpp = RiskParityPortfolio(covariance=S, budget=b)
     rpp.design()
     np.testing.assert_allclose(rpp.weights, ans, rtol = 1e-5)
-    assert rpp.risk_concentration.evaluate(rpp.weights) < 1e-9
+    assert rpp.risk_concentration.evaluate() < 1e-9

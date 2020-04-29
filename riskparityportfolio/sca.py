@@ -172,7 +172,7 @@ class SuccessiveConvexOptimizer:
                              "{}".format(value.shape, self.Dmat.shape))
 
     def get_objective_function_value(self):
-        obj = self.portfolio.risk_concentration.evaluate(self.portfolio.weights)
+        obj = self.portfolio.risk_concentration.evaluate()
         if self.portfolio.has_mean_return:
             obj -= self.portfolio.alpha * self.portfolio.mean_return
         if self.portfolio.has_variance:

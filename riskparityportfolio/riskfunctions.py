@@ -5,8 +5,8 @@ class RiskConcentrationFunction:
     def __init__(self, portfolio):
         self.portfolio = portfolio
 
-    def evaluate(self, portfolio_weights):
-        return np.sum(np.square(self.risk_concentration_vector(portfolio_weights)))
+    def evaluate(self):
+        return np.sum(np.square(self.risk_concentration_vector(self.portfolio.weights)))
 
     # the vector g in Feng & Palomar 2015
     def risk_concentration_vector(self, portfolio_weights):
@@ -14,7 +14,7 @@ class RiskConcentrationFunction:
 
     # jacobian of the vector function risk_concentration_vector with respect to weights
     def jacobian_risk_concentration_vector(self, portfolio_weights):
-        return jacfwd(self.risk_concentration_vector)(portfolio_weights)
+        return jit(jacfwd(self.risk_concentration_vector))(portfolio_weights)
 
 class RiskContribOverBudgetDoubleIndex(RiskConcentrationFunction):
     def risk_concentration_vector(self, portfolio_weights):
