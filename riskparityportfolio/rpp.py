@@ -63,7 +63,7 @@ class RiskParityPortfolio:
 
     @property
     def volatility(self):
-        return np.sqrt(np.dot(self.weights, np.matmul(self.covariance, self.weights))
+        return np.sqrt(np.dot(self.weights, np.matmul(self.covariance, self.weights)))
 
     @property
     def risk_contributions(self):
