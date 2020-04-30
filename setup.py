@@ -127,8 +127,8 @@ setup(
     packages=['riskparityportfolio'],
     long_description='',
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.4', 'numpy', 'jax', 'quadprog', 'tqdm'],
-    setup_requires=['pybind11>=2.4', 'numpy', 'jax', 'quadprog', 'tqdm'],
+    install_requires=['pybind11>=2.4', 'numpy', 'jaxlib', 'jax', 'quadprog', 'tqdm'],
+    setup_requires=['pybind11>=2.4', 'numpy', 'jaxlib', 'jax', 'quadprog', 'tqdm'],
     cmdclass={'build_ext': BuildExt},
     classifiers=[
     'Development Status :: 3 - Alpha',
