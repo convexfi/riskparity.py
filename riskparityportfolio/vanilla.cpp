@@ -12,9 +12,8 @@ Eigen::VectorXd risk_parity_portfolio_ccd_spinu(const Eigen::MatrixXd& Sigma,
                                                 const unsigned int maxiter = 50) {
   double aux, x_diff, xk_sum;
   const unsigned int n = b.size();
-  Eigen::VectorXd xk = Eigen::VectorXd::Constant(n, 1);
+  Eigen::VectorXd xk = (1 / Sigma.diagonal().array().sqrt()).matrix();
   Eigen::VectorXd x_star(n), Sigma_xk(n), rc(n);
-  xk = (1 / Sigma.sum()) * xk;
   Sigma_xk = Sigma * xk;
   for (unsigned int k = 0; k < maxiter; ++k) {
     for (unsigned int i = 0; i < n; ++i) {
