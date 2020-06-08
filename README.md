@@ -17,7 +17,8 @@ method proposed by [Feng & Palomar (2015)](https://doi.org/10.1109/TSP.2015.2452
 
 **R version:** [**https://mirca.github.io/riskParityPortfolio**](https://mirca.github.io/riskParityPortfolio)
 
-**Talk**: [**slides HKML meetup 2020**](https://speakerdeck.com/mirca/breaking-down-risk-parity-portfolios-a-practical-open-source-implementation)
+**Talks**: [**slides HKML meetup 2020**](https://speakerdeck.com/mirca/breaking-down-risk-parity-portfolios-a-practical-open-source-implementation),
+[**tutorial - Data-driven Portfolio Optimization Course (HKUST)**](https://www.youtube.com/watch?v=xb1Xxf5LQks)
 
 ## Installation
 
