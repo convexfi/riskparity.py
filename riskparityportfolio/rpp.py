@@ -18,7 +18,7 @@ class RiskParityPortfolio:
     minimize R(w) - alpha * mu.T * w + lambda * w.T Sigma w
     subject to Cw = c, Dw <= d
 
-    where R is a risk concentration function, and alpha and beta are trade-off
+    where R is a risk concentration function, and alpha and lambda are trade-off
     parameters for the expected return and the variance, respectively.
 
     Parameters
