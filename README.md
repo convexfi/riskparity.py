@@ -30,7 +30,7 @@ $ pip install -e .
 
 ## License
 
-Copyright 2019 Ze Vinicius and Daniel Palomar
+Copyright 2021 [Ze Vinicius](https://mirca.github.io) and [Daniel Palomar](https://www.danielppalomar.com)
 
 This project is licensed under the terms of the MIT License.
 
