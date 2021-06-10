@@ -1,6 +1,7 @@
 import riskparityportfolio as rpp
 import numpy as np
 
+
 def test():
     n = 1000
     t = 1000 * n
@@ -15,4 +16,4 @@ def test():
     # assert that the portfolio repect the no-shortselling constraint
     np.testing.assert_equal(all(w > 0), True)
     # assert that the desired risk contributions are attained
-    np.testing.assert_allclose(rc, b, rtol = 1e-4)
+    np.testing.assert_allclose(rc, b, rtol=1e-4)

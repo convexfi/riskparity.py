@@ -1,16 +1,21 @@
 import warnings
 import numpy as np
 from .sca import SuccessiveConvexOptimizer
-from .riskfunctions import RiskContribOverBudgetDoubleIndex, RiskContribOverVarianceMinusBudget, RiskConcentrationFunction
+from .riskfunctions import (
+    RiskContribOverBudgetDoubleIndex,
+    RiskContribOverVarianceMinusBudget,
+    RiskConcentrationFunction,
+)
 from .vanilla import design as design_vanilla
 
 
-__all__ = ['RiskParityPortfolio']
+__all__ = ["RiskParityPortfolio"]
 
 
 class RiskParityPortfolioValidator:
     def __init__(self):
         pass
+
 
 class RiskParityPortfolio:
     """Designs risk parity portfolios by solving the following optimization problem
@@ -37,11 +42,15 @@ class RiskParityPortfolio:
         any valid child class of RiskConcentrationFunction
     """
 
-    def __init__(self, covariance, budget=None,
-                 equality_constraints=None,
-                 inequality_constraints=None,
-                 weights=None,
-                 risk_concentration=None):
+    def __init__(
+        self,
+        covariance,
+        budget=None,
+        equality_constraints=None,
+        inequality_constraints=None,
+        weights=None,
+        risk_concentration=None,
+    ):
         self.covariance = covariance
         self.budget = budget
         self.weights = weights
@@ -59,7 +68,9 @@ class RiskParityPortfolio:
         if self.has_mean_return:
             return np.dot(self.weights, self.mean)
         else:
-            raise ValueError("the portfolio mean has not been specified, please use add_mean_return")
+            raise ValueError(
+                "the portfolio mean has not been specified, please use add_mean_return"
+            )
 
     @property
     def volatility(self):
@@ -99,8 +110,10 @@ class RiskParityPortfolio:
         elif issubclass(value, RiskConcentrationFunction):
             self._risk_concentration = value(self)
         else:
-            raise ValueError("risk_concentration {} is not a valid child class "
-                             "of RiskConcentrationFunction".format(value))
+            raise ValueError(
+                "risk_concentration {} is not a valid child class "
+                "of RiskConcentrationFunction".format(value)
+            )
 
     @property
     def budget(self):
@@ -148,7 +161,9 @@ class RiskParityPortfolio:
 
     def validate(self):
         if self.covariance.shape[0] != self.budget.shape[0]:
-            raise ValueError("shape mismatch between covariance matrix and budget vector")
+            raise ValueError(
+                "shape mismatch between covariance matrix and budget vector"
+            )
 
     def add_mean_return(self, alpha, mean):
         """Whether to consider the maximization of the mean return of the portfolio.
