@@ -21,11 +21,24 @@ method proposed by [Feng & Palomar (2015)](https://doi.org/10.1109/TSP.2015.2452
 
 ## Installation
 
+* **development version**
+
 ```
 $ git clone https://github.com/dppalomar/riskparity.py.git
 $ cd riskparity.py
 $ pip install -e .
 ```
+
+* **stable version**
+
+```
+$ pip install riskparityportfolio
+```
+
+### Windows requirements
+
+Make sure to install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+prior to ``riskparityportfolio``.
 
 
 ## License
