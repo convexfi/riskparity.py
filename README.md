@@ -42,9 +42,21 @@ Make sure to install [Microsoft C++ Build Tools](https://visualstudio.microsoft.
 prior to ``riskparityportfolio``.
 
 
+## References
+
+* Spinu, Florin. An Algorithm for Computing Risk Parity Weights (July 30, 2013). Available at SSRN: [https://ssrn.com/abstract=2297383](https://ssrn.com/abstract=2297383).
+
+* Griveau-Billion, Théophile et al. A Fast Algorithm for Computing High-dimensional Risk Parity Portfolios. [https://arxiv.org/abs/1311.4057](https://arxiv.org/abs/1311.4057)
+
+* Feng, Yiyong et al. SCRIP: Successive Convex Optimization Methods for Risk Parity Portfolio Design.
+IEEE Transactions on Signal Processing, 2015. [https://ieeexplore.ieee.org/document/7145485](https://ieeexplore.ieee.org/document/7145485)
+
+* Choi J eat al. Improved iterative methods for solving risk parity portfolio. Journal of Derivatives and Quantitative Studies 30 (forthcoming). [https://doi.org/10.1108/JDQS-12-2021-0031](https://doi.org/10.1108/JDQS-12-2021-0031)
+
+
 ## License
 
-Copyright 2021 [Ze Vinicius](https://mirca.github.io) and [Daniel Palomar](https://www.danielppalomar.com)
+Copyright 2022 [Ze Vinicius](https://mirca.github.io) and [Daniel Palomar](https://www.danielppalomar.com)
 
 This project is licensed under the terms of the MIT License.
 
