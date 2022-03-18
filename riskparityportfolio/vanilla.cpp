@@ -50,8 +50,9 @@ vector_t risk_parity_portfolio_ccd_choi(c_matrix_t& cov,
   const unsigned int n = b.size();
   vector_t a(n);
   vector_t vol = cov.diagonal().array().sqrt();
-  matrix_t invvol_mat = (1 / vol.array()).matrix().asDiagonal();
-  matrix_t corr = invvol_mat * cov * invvol_mat;
+  vector_t invvol = (1 / vol.array()).matrix();
+  matrix_t corr = cov.array().colwise() * invvol.array();
+  corr = corr.array().rowwise() * invvol.transpose().array();
   matrix_t adj = corr;
   adj.diagonal().array() = 0;
   vector_t wk = vector_t::Ones(n);
