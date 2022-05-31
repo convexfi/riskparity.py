@@ -8,8 +8,8 @@
 **riskparityportfolio** provides tools to design risk parity portfolios.
 In its simplest form, we consider the convex formulation with a unique solution proposed by
 [Spinu (2013)](https://dx.doi.org/10.2139/ssrn.2297383) and use cyclical methods inspired by
-[Griveau-Billion (2013)](https://arxiv.org/pdf/1311.4057.pdf)
-and [Choi (2022)](https://arxiv.org/pdf/2203.00148.pdf). For more general formulations,
+[Griveau-Billion et al. (2013)](https://arxiv.org/pdf/1311.4057.pdf)
+and [Choi & Chen (2022)](https://www.emerald.com/insight/content/doi/10.1108/JDQS-12-2021-0031/full/pdf). For more general formulations,
 which are usually nonconvex, we implement the successive convex approximation
 method proposed by [Feng & Palomar (2015)](https://doi.org/10.1109/TSP.2015.2452219).
 
@@ -51,7 +51,7 @@ prior to ``riskparityportfolio``.
 * Feng, Yiyong et al. SCRIP: Successive Convex Optimization Methods for Risk Parity Portfolio Design.
 IEEE Transactions on Signal Processing, 2015. [https://ieeexplore.ieee.org/document/7145485](https://ieeexplore.ieee.org/document/7145485)
 
-* Choi J eat al. Improved iterative methods for solving risk parity portfolio. Journal of Derivatives and Quantitative Studies 30 (forthcoming). [https://doi.org/10.1108/JDQS-12-2021-0031](https://doi.org/10.1108/JDQS-12-2021-0031)
+* Choi, J., & Chen, R. (2022). Improved iterative methods for solving risk parity portfolio. Journal of Derivatives and Quantitative Studies 30(2), 114–124. [https://doi.org/10.1108/JDQS-12-2021-0031](https://doi.org/10.1108/JDQS-12-2021-0031)
 
 
 ## License
