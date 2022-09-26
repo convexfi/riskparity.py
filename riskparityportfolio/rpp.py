@@ -32,10 +32,6 @@ class RiskParityPortfolio:
         covariance matrix of the assets
     budget : array, shape=(n,)
         risk budget vector
-    equality_constraints : string
-        the equality constraint expression
-    inequality_constraints : string
-        the inequality constraint expression
     weights : array, shape=(n,)
         weights of the portfolio
     risk_concentration : class
@@ -46,8 +42,6 @@ class RiskParityPortfolio:
         self,
         covariance,
         budget=None,
-        equality_constraints=None,
-        inequality_constraints=None,
         weights=None,
         risk_concentration=None,
     ):
@@ -146,18 +140,6 @@ class RiskParityPortfolio:
             abs_eigvals = np.abs(eigvals)
             if np.max(abs_eigvals) / np.min(abs_eigvals) < 1e-6:
                 warnings.warn("covariance matrix maybe singular")
-
-    @property
-    def equality_constraints(self):
-        return self._equality_constraints
-
-    @property
-    def inequality_constraints(self):
-        return self._inequality_constraints
-
-    @property
-    def box_constraints(self):
-        return self._box_constraints
 
     def validate(self):
         if self.covariance.shape[0] != self.budget.shape[0]:
