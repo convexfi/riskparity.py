@@ -3,6 +3,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
+
 using namespace Eigen;
 using namespace std;
 
@@ -16,7 +19,7 @@ typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> matrix_t;
 vector_t risk_parity_portfolio_ccd_spinu(c_matrix_t& Sigma,
                                          c_vector_t& b,
                                          const double tol = 1E-4,
-                                         const unsigned int maxiter = 100) {
+                                         const int maxiter = 100) {
   double aux, x_diff, xk_sum;
   auto n = b.size();
   vector_t xk = (1 / Sigma.diagonal().array().sqrt()).matrix();
@@ -164,8 +167,8 @@ PYBIND11_MODULE(vanilla, m) {
        );
 
 #ifdef VERSION_INFO
-    m.attr("__version__") = VERSION_INFO;
+    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
 #else
     m.attr("__version__") = "dev";
 #endif
-}
+};
