@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/mirca/riskparity.py/branch/master/graph/badge.svg)](https://codecov.io/gh/mirca/riskparity.py)
 
 
-**riskparityportfolio** provides tools to design risk parity portfolios.
+**riskparityportfolio** provides solvers to design risk parity portfolios.
 In its simplest form, we consider the convex formulation with a unique solution proposed by
 [Spinu (2013)](https://dx.doi.org/10.2139/ssrn.2297383) and use cyclical methods inspired by
 [Griveau-Billion et al. (2013)](https://arxiv.org/pdf/1311.4057.pdf)
