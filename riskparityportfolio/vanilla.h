@@ -18,7 +18,8 @@ vector_t risk_parity_portfolio_ccd_spinu(c_matrix_t& Sigma,
                                          const int maxiter = 100) {
   double aux, x_diff, xk_sum;
   auto n = b.size();
-  vector_t xk = (1 / Sigma.diagonal().array().sqrt()).matrix();
+  vector_t xk = vector_t::Constant(n, 1);
+  xk = std::sqrt(1.0 / Sigma.sum()) * xk;
   vector_t x_star(n), Sigma_xk(n), rc(n);
   Sigma_xk = Sigma * xk;
   for (auto k = 0; k < maxiter; ++k) {
