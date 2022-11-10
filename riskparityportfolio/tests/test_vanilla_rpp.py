@@ -8,10 +8,9 @@ def test(method):
     t = 1000 * n
     x = np.random.normal(size=t).reshape((n, -1))
     cov = np.cov(x)
-    print(cov.shape)
-    b = np.ones(len(cov)) / len(cov)
+    b = np.random.uniform(size=n)
+    b = b / np.sum(b)
     w = rpp.vanilla.design(cov, b, maxiter=1000, method=method)
-    print(w)
     rc = w @ (cov * w)
     rc = rc / np.sum(rc)
     # assert that the portfolio respect the budget constraint
