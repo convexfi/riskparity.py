@@ -46,7 +46,8 @@ vector_t risk_parity_portfolio_ccd_spinu(c_matrix_t& Sigma,
 vector_t risk_parity_portfolio_ccd_choi(c_matrix_t& cov,
                                         c_vector_t& b,
                                         const double tol = 1E-4,
-                                        const unsigned int maxiter = 100) {
+                                        const int maxiter = 100) {
+  double ai;
   auto n = b.size();
   vector_t a(n);
   vector_t vol = cov.diagonal().array().sqrt();
@@ -57,10 +58,13 @@ vector_t risk_parity_portfolio_ccd_choi(c_matrix_t& cov,
   adj.diagonal().array() = 0;
   vector_t wk = vector_t::Ones(n);
   wk = (wk.array() / std::sqrt(corr.sum())).matrix();
-  for (unsigned int k = 0; k < maxiter; ++k) {
-    // compute portfolio weights
-    a = 0.5 * adj * wk;
-    wk = ((a.array() * a.array() + b.array()).sqrt() - a.array()).matrix();
+  for (auto k = 0; k < maxiter; ++k) {
+    for (auto i = 0; i < n; ++i) {
+      // compute portfolio weights
+      ai = 0.5 * ((adj.col(i).array() * wk.array()).sum());
+      wk(i) = std::sqrt(ai * ai + b(i)) - ai;
+    }
+    wk = wk.array() / std::sqrt(wk.transpose() * corr * wk);
     if ((wk.array() * (corr * wk).array() - b.array()).abs().maxCoeff() < tol)
       break;
   }
