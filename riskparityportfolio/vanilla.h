@@ -49,7 +49,6 @@ vector_t risk_parity_portfolio_ccd_choi(c_matrix_t& cov,
                                         const int maxiter = 100) {
   double ai;
   auto n = b.size();
-  vector_t a(n);
   vector_t vol = cov.diagonal().array().sqrt();
   vector_t invvol = (1 / vol.array()).matrix();
   matrix_t corr = cov.array().colwise() * invvol.array();
