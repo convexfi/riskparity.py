@@ -43,6 +43,9 @@ $ pip install riskparityportfolio
 Make sure to install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 prior to ``riskparityportfolio``.
 
+``riskparityportfolio`` depends on ``jaxlib`` which can be installed following these
+[instructions](https://github.com/cloudhan/jax-windows-builder).
+
 
 ## References
 
