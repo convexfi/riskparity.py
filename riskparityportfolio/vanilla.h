@@ -46,7 +46,8 @@ vector_t risk_parity_portfolio_ccd_spinu(c_matrix_t& Sigma,
 vector_t risk_parity_portfolio_ccd_choi(c_matrix_t& cov,
                                         c_vector_t& b,
                                         const double tol = 1E-4,
-                                        const int maxiter = 100) {
+                                        const int maxiter = 100) 
+  {
   double ai;
   auto n = b.size();
   vector_t vol = cov.diagonal().array().sqrt();
@@ -72,3 +73,5 @@ vector_t risk_parity_portfolio_ccd_choi(c_matrix_t& cov,
 }
 
 #endif
+
+

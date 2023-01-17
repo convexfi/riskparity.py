@@ -100,10 +100,4 @@ PYBIND11_MODULE(vanilla, m) {
           To get the risk parity portfolio, set `b` as the 1/n uniform vector.
         )pbdoc"
        );
-
-#ifdef VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
-#else
-    m.attr("__version__") = "dev";
-#endif
 };
