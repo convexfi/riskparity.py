@@ -1,6 +1,0 @@
-pybind11 >= 2.4
-numpy
-jaxlib
-jax
-quadprog
-tqdm
