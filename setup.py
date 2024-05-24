@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os
 
-__version__ = "0.4"
+__version__ = "0.5.1"
 
 # Prepare and send a new release to PyPI
 if "release" in sys.argv[-1]:
@@ -33,7 +33,7 @@ class get_pybind_include(object):
 ext_modules = [
     Extension(
         "riskparityportfolio.vanilla",
-        ["riskparityportfolio/vanilla.cpp"],
+        ["src/riskparityportfolio/vanilla.cpp"],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
@@ -69,7 +69,10 @@ def cpp_flag(compiler):
     if sys.platform == "darwin":
         flags = ["-std=c++14", "-std=c++11"]
     else:
-        flags = ["-std=c++17", "-std=c++14", "-std=c++11"]
+        flags = ["-std=c++20",
+                 "-std=c++17",
+                 "-std=c++14",
+                 "-std=c++11"]
 
     for flag in flags:
         if has_flag(compiler, flag):
@@ -129,12 +132,16 @@ setup(
     url="https://github.com/dppalomar/riskparity.py",
     description="Blazingly fast design of risk parity portfolios",
     license="MIT",
-    package_dir={"riskparityportfolio": "riskparityportfolio"},
+    package_dir={"riskparityportfolio": "src/riskparityportfolio"},
     packages=["riskparityportfolio"],
     long_description="",
     ext_modules=ext_modules,
-    install_requires=["pybind11>=2.4", "numpy", "jaxlib", "jax", "quadprog", "tqdm"],
-    setup_requires=["pybind11>=2.4", "numpy", "jaxlib", "jax", "quadprog", "tqdm"],
+    setup_requires=["pybind11>=2.4",
+                    "numpy",
+                    "jaxlib",
+                    "jax",
+                    "quadprog>=0.1.12",
+                    "tqdm"],
     cmdclass={"build_ext": BuildExt},
     classifiers=[
         "Development Status :: 3 - Alpha",
