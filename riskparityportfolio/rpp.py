@@ -18,13 +18,21 @@ class RiskParityPortfolioValidator:
 
 
 class RiskParityPortfolio:
-    """Designs risk parity portfolios by solving the following optimization problem
+    """Designs risk parity portfolios by solving the following optimization problem:
 
-    minimize R(w) - alpha * mu.T * w + lambda * w.T Sigma w
-    subject to Cw = c, Dw <= d
+      minimize     R(w) - alpha * mu.T w + lambda * w.T Sigma w
+      subject to   Cw = c, Dw <= d
 
-    where R is a risk concentration function, and alpha and lambda are trade-off
+    where R(w) is a risk concentration function, and alpha and lambda are trade-off
     parameters for the expected return and the variance, respectively.
+
+    The risk concentration R(w) is computed as the squared l2-norm of the risk concentration vector,
+    which by default is obtained from RiskContribOverVarianceMinusBudget():
+
+      R(w) = sum_i (MR_i/sum(MR_i) - budget_i)^2
+
+    where MR_i = w_i * (Sigma @ w)_i are the marginal risks (sum(MR_i) = Var(w)), and
+          budget_i are the risk budgets (by default 1/n).
 
     Parameters
     ----------
@@ -36,6 +44,23 @@ class RiskParityPortfolio:
         weights of the portfolio
     risk_concentration : class
         any valid child class of RiskConcentrationFunction
+
+    Examples:
+    # Set up:
+    >>> import numpy as np
+    >>> import riskparityportfolio as rpp
+    >>> n = 10
+    >>> U = np.random.multivariate_normal(mean=np.zeros(n), cov=0.1 * np.eye(n), size=round(.7 * n)).T
+    >>> Sigma = U @ U.T + np.eye(n)
+    # Basic usage with equality constraints:
+    >>> my_portfolio = rpp.RiskParityPortfolio(Sigma)
+    >>> my_portfolio.design(Cmat=Cmat, cvec=cvec)
+    >>> my_portfolio.weights
+    # Basic usage with equality and inequality constraints:
+    >>> my_portfolio.design(Cmat=Cmat, cvec=cvec, Dmat=Dmat, dvec=dvec)
+    # Further control of the iterative algorithm:
+    >>> my_portfolio.design(Cmat=Cmat, cvec=cvec, Dmat=Dmat, dvec=dvec,
+    >>>                     verbose=False, tau=1e-10, control_numerical_ill_conditioning=True)
     """
 
     def __init__(
@@ -172,13 +197,18 @@ class RiskParityPortfolio:
         self.lmd = lmd
         self.has_variance = True
 
-    def design(self, **kwargs):
+    def design(self, verbose=True, control_numerical_ill_conditioning=False, **kwargs):
         """Optimize the portfolio.
 
         Parameters
         ----------
+        verbose : boolean
+            Whether to print the optimization process.
+        control_numerical_ill_conditioning : boolean
+            Whether to control numerical ill-conditioning of matrices over the iterations
+            (at the expense of a computational cost of O(n^3) per iteration for n assets).
         kwargs : dict
-            Dictionary of parameters to be passed to SuccessiveConvexOptimizer.
+            Dictionary of parameters to be passed to SuccessiveConvexOptimizer().
         """
         self.sca = SuccessiveConvexOptimizer(self, **kwargs)
-        self.sca.solve()
+        self.sca.solve(verbose=verbose, control_numerical_ill_conditioning=control_numerical_ill_conditioning)
