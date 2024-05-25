@@ -102,7 +102,8 @@ def test_constraints():
     w = my_portfolio.weights
     np.testing.assert_almost_equal(np.sum(w), 1)
     np.testing.assert_equal(all(w >= 0), True)
-    np.testing.assert_array_less(w, 0.03 + 1e-3)
+    print(max(w))
+    np.testing.assert_array_less(w, (0.03 + 1e-3)*np.ones(N))
 
     # Bounds for sum: 0.5 <= sum(w) <= 1 (
     my_portfolio = rpp.RiskParityPortfolio(Sigma)
