@@ -109,7 +109,7 @@ def test_constraints():
     my_portfolio.design(Cmat=np.empty((0, N)), cvec=[],
                         Dmat=np.vstack([-np.ones((1,N)), np.ones((1,N))]), dvec=np.array([-0.5, 1]))
     w = my_portfolio.weights
-    np.testing.assert_array_less(sum(w), 1)
+    np.testing.assert_array_less(sum(w), 1.0)
     np.testing.assert_array_less(-sum(w), -0.5)
 
 
