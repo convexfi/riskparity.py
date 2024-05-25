@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 from tqdm import tqdm
 
 try:
@@ -251,12 +252,11 @@ class SuccessiveConvexOptimizer:
             w_hat = quadprog.solve_qp(Q, -q, C=self.CCmat, b=self.bvec, meq=self.meq)[0]
         except ValueError as e:
             if str(e) == "matrix G is not positive definite":
-                # Add a small positive value to the diagonal of Q to make it positive definite
-                if verbose:
-                    print("  Matrix Q is not positive definite: adding regularization term and then calling QP solver again.")
-                    #eigvals = np.linalg.eigvals(Q)
-                    #print("    - before regularization: cond. number = {:,.0f}".format(max(eigvals) / min(eigvals)))
-                    #print("    - after regularization: cond. number = {:,.0f}".format(max(eigvals + np.trace(Q)/1e7) / min(eigvals + np.trace(Q)/1e7)))
+                warnings.warn(
+                    "Matrix Q is not positive definite: adding regularization term and then calling QP solver again.")
+                # eigvals = np.linalg.eigvals(Q)
+                # print("    - before regularization: cond. number = {:,.0f}".format(max(eigvals) / min(eigvals)))
+                # print("    - after regularization: cond. number = {:,.0f}".format(max(eigvals + np.trace(Q)/1e7) / min(eigvals + np.trace(Q)/1e7)))
                 Q += np.eye(Q.shape[0]) * np.trace(Q)/1e7
                 w_hat = quadprog.solve_qp(Q, -q, C=self.CCmat, b=self.bvec, meq=self.meq)[0]
             else:

@@ -1,5 +1,6 @@
 import numpy as np
 import riskparityportfolio as rpp
+import pytest
 import pdb
 
 def test_on_tricky_example():
@@ -49,7 +50,8 @@ def test_singularity_issues_with_G_matrix():
     Sigma = U @ U.T  # singular covariance matrix
 
     my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
-    my_portfolio.design(verbose=False, tau=1e-10)  # <-- force ill-conditioned matrix
+    with pytest.warns(UserWarning, match="Matrix Q is not positive definite: adding regularization term and then calling QP solver again."):
+        my_portfolio.design(verbose=False, tau=1e-12)  # <-- force ill-conditioned matrix
     w_ref = my_portfolio.weights
 
     my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
