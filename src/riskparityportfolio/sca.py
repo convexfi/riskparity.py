@@ -230,7 +230,7 @@ class SuccessiveConvexOptimizer:
             obj += self.portfolio.lmd * self.portfolio.volatility ** 2
         return obj
 
-    def iterate(self, verbose=True, control_numerical_ill_conditioning=False):
+    def iterate(self, verbose=True):
         wk = self.portfolio.weights
         g = self.gvec(wk)
         A = np.ascontiguousarray(self.Amat(wk))
@@ -246,58 +246,57 @@ class SuccessiveConvexOptimizer:
                            np.hstack([np.zeros((self.number_of_dummy_vars, self.portfolio.number_of_assets)),
                                       self.tau * np.eye(self.portfolio.number_of_assets)])])
             q = np.concatenate([q, -self.tau * self.dummy_vars])
-        if control_numerical_ill_conditioning:
-            eigvals = np.linalg.eigvals(Q)
-            if min(eigvals) < 0 or abs(max(eigvals)/min(eigvals)) > 1e8:
-                reg = 0
+        # Call QP solver (min 0.5*x.T G x + a.T x  s.t.  C.T x >= b) controlling for ill-conditioning:
+        try:
+            w_hat = quadprog.solve_qp(Q, -q, C=self.CCmat, b=self.bvec, meq=self.meq)[0]
+        except ValueError as e:
+            if str(e) == "matrix G is not positive definite":
+                # Add a small positive value to the diagonal of Q to make it positive definite
                 if verbose:
-                    print("\n")
-                if min(eigvals) < 0:
-                    if verbose:
-                        print("--> Q is not positive definite: adding regularization term before calling QP solver.")
-                    reg += 2*abs(min(eigvals))
-                if max(eigvals + reg)/min(eigvals + reg) > 1e8:
-                    if verbose:
-                        print("--> Q is ill-conditioned: adding regularization term before calling QP solver.")
-                    reg += max(eigvals)/1e8
-                if verbose:
-                    print("    Before regularization: cond. number = {:,.0f}".format(max(eigvals) / min(eigvals)))
-                    print("    After regularization: cond. number = {:,.0f}".format(max(eigvals + reg) / min(eigvals + reg)))
-                Q += reg * np.eye(Q.shape[0])
-        # Solver for: min 0.5*x.T G x + a.T x s.t.  C.T x >= b
-        w_hat = quadprog.solve_qp(Q, -q, C=self.CCmat, b=self.bvec, meq=self.meq)[0]
+                    print("  Matrix Q is not positive definite: adding regularization term and then calling QP solver again.")
+                    #eigvals = np.linalg.eigvals(Q)
+                    #print("    - before regularization: cond. number = {:,.0f}".format(max(eigvals) / min(eigvals)))
+                    #print("    - after regularization: cond. number = {:,.0f}".format(max(eigvals + np.trace(Q)/1e7) / min(eigvals + np.trace(Q)/1e7)))
+                Q += np.eye(Q.shape[0]) * np.trace(Q)/1e7
+                w_hat = quadprog.solve_qp(Q, -q, C=self.CCmat, b=self.bvec, meq=self.meq)[0]
+            else:
+                # If the error is different, re-raise it
+                raise
         self.portfolio.weights = wk + self.gamma * (w_hat[:self.portfolio.number_of_assets] - wk)
         fun_next = self.get_objective_function_value()
         self.objective_function.append(fun_next)
         has_w_converged = (
-            np.abs(self.portfolio.weights - wk)
-            <= 0.5 * self.wtol * (np.abs(self.portfolio.weights) + np.abs(wk))
+                (np.abs(self.portfolio.weights - wk) <= self.wtol * 0.5 * (np.abs(self.portfolio.weights) + np.abs(wk)))
+                | ((np.abs(self.portfolio.weights) < 1e-6) & (np.abs(wk) < 1e-6))
         ).all()
         has_fun_converged = (
-            np.abs(self._funk - fun_next)
-            <= 0.5 * self.funtol * (np.abs(self._funk) + np.abs(fun_next))
-        ).all()
+                (np.abs(self._funk - fun_next) <= self.funtol * 0.5 * (np.abs(self._funk) + np.abs(fun_next)))
+                | ((np.abs(self._funk) <= 1e-10) & (np.abs(fun_next) <= 1e-10))
+        )
         if self.number_of_dummy_vars > 0:
             have_dummies_converged = (
-                    np.abs(w_hat[self.portfolio.number_of_assets:] - self.dummy_vars)
-                    <= 0.5 * self.wtol * (np.abs(w_hat[self.portfolio.number_of_assets:]) + np.abs(self.dummy_vars))
+                    (np.abs(w_hat[self.portfolio.number_of_assets:] - self.dummy_vars) <= self.wtol * 0.5 *
+                     (np.abs(w_hat[self.portfolio.number_of_assets:]) + np.abs(self.dummy_vars)))
+                    | ((np.abs(w_hat[self.portfolio.number_of_assets:]) < 1e-6) & (np.abs(self.dummy_vars) < 1e-6))
             ).all()
             self.dummy_vars = w_hat[self.portfolio.number_of_assets:]
         else:
             have_dummies_converged = True
         if (has_w_converged and have_dummies_converged) or has_fun_converged:
+            # if verbose:
+            #     print(f"  Has func. converged: {has_fun_converged}; has w converged: {has_w_converged}")
             return False
         self.gamma = self.gamma * (1 - self.zeta * self.gamma)
         self._funk = fun_next
         return True
 
-    def solve(self, verbose=True, control_numerical_ill_conditioning=False):
+    def solve(self, verbose=True):
         i = 0
         iterator = range(self.maxiter)
         if verbose:
             iterator = tqdm(iterator)
         for _ in iterator:
-            if not self.iterate(verbose=verbose, control_numerical_ill_conditioning=control_numerical_ill_conditioning):
+            if not self.iterate(verbose=verbose):
                 break
             i += 1
 

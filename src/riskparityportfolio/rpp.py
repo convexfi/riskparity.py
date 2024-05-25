@@ -52,15 +52,12 @@ class RiskParityPortfolio:
     >>> n = 10
     >>> U = np.random.multivariate_normal(mean=np.zeros(n), cov=0.1 * np.eye(n), size=round(.7 * n)).T
     >>> Sigma = U @ U.T + np.eye(n)
-    # Basic usage with equality constraints:
+    # Basic usage with default constraints sum(w) = 1 and w >= 0:
     >>> my_portfolio = rpp.RiskParityPortfolio(Sigma)
-    >>> my_portfolio.design(Cmat=Cmat, cvec=cvec)
+    >>> my_portfolio.design()
     >>> my_portfolio.weights
     # Basic usage with equality and inequality constraints:
     >>> my_portfolio.design(Cmat=Cmat, cvec=cvec, Dmat=Dmat, dvec=dvec)
-    # Further control of the iterative algorithm:
-    >>> my_portfolio.design(Cmat=Cmat, cvec=cvec, Dmat=Dmat, dvec=dvec,
-    >>>                     verbose=False, tau=1e-10, control_numerical_ill_conditioning=True)
     """
 
     def __init__(
@@ -197,18 +194,15 @@ class RiskParityPortfolio:
         self.lmd = lmd
         self.has_variance = True
 
-    def design(self, verbose=True, control_numerical_ill_conditioning=False, **kwargs):
+    def design(self, verbose=True, **kwargs):
         """Optimize the portfolio.
 
         Parameters
         ----------
         verbose : boolean
             Whether to print the optimization process.
-        control_numerical_ill_conditioning : boolean
-            Whether to control numerical ill-conditioning of matrices over the iterations
-            (at the expense of a computational cost of O(n^3) per iteration for n assets).
         kwargs : dict
             Dictionary of parameters to be passed to SuccessiveConvexOptimizer().
         """
         self.sca = SuccessiveConvexOptimizer(self, **kwargs)
-        self.sca.solve(verbose=verbose, control_numerical_ill_conditioning=control_numerical_ill_conditioning)
+        self.sca.solve(verbose)

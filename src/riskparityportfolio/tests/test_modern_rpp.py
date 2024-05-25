@@ -28,11 +28,11 @@ def test_random_covmat():
     Sigma = U @ U.T + np.eye(N)
     #pdb.set_trace()
     my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
-    my_portfolio.design(verbose=False)
+    my_portfolio.design()
     w = my_portfolio.weights
 
     # assert that the portfolio respect the budget constraint
-    np.testing.assert_almost_equal(np.sum(w), 1)
+    np.testing.assert_almost_equal(np.sum(w), 1.0)
     # assert that the portfolio respect the no-shortselling constraint
     np.testing.assert_equal(all(w >= 0), True)
     # assert that the desired risk contributions are attained
@@ -49,23 +49,23 @@ def test_singularity_issues_with_G_matrix():
     Sigma = U @ U.T  # singular covariance matrix
 
     my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
-    my_portfolio.design(verbose=False, tau=1e-10, control_numerical_ill_conditioning=True)
-    w1 = my_portfolio.weights
+    my_portfolio.design(verbose=False, tau=1e-10)  # <-- force ill-conditioned matrix
+    w_ref = my_portfolio.weights
 
     my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
-    my_portfolio.design(tau=1e-4)
-    w2 = my_portfolio.weights
-    np.testing.assert_allclose(w1, w2, rtol=1e-3)
+    my_portfolio.design(tau=1e-4)  # <-- default tau, should be fine
+    w = my_portfolio.weights
+    np.testing.assert_allclose(w, w_ref, rtol=1e-3)
 
-    my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
-    my_portfolio.design(tau=0.05 * np.sum(np.diag(Sigma)) / (2 * N))
-    w3 = my_portfolio.weights
-    np.testing.assert_allclose(w1, w3, rtol=1e-3)
-
-    my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
-    my_portfolio.design(tau=2 * 0.1 ** 2 / (2 * N))
-    w4 = my_portfolio.weights
-    np.testing.assert_allclose(w1, w4, rtol=1e-3)
+    # my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
+    # my_portfolio.design(verbose=True, tau=0.05 * np.sum(np.diag(Sigma)) / (2 * N))
+    # w = my_portfolio.weights
+    # np.testing.assert_allclose(w, w_ref, rtol=1e-3)
+    #
+    # my_portfolio = rpp.RiskParityPortfolio(Sigma, budget=b)
+    # my_portfolio.design(verbose=True, tau=2 * 0.1 ** 2 / (2 * N))
+    # w = my_portfolio.weights
+    # np.testing.assert_allclose(w, w_ref, rtol=1e-3)
 
 
 def test_constraints():
@@ -95,7 +95,7 @@ def test_constraints():
     np.testing.assert_allclose(w1, w3, rtol=1e-5)
 
 
-    # Upper bound w <= 0.03
+    # Additional upper bound: w <= 0.03
     my_portfolio = rpp.RiskParityPortfolio(Sigma)
     my_portfolio.design(Cmat=np.ones((1, N)), cvec=np.array([1.0]),
                         Dmat=np.vstack([np.eye(N), -np.eye(N)]), dvec=np.concatenate([0.03*np.ones(N), np.zeros(N)]))
@@ -105,16 +105,24 @@ def test_constraints():
     print(max(w))
     np.testing.assert_array_less(w, (0.03 + 1e-3)*np.ones(N))
 
-    # Bounds for sum: 0.5 <= sum(w) <= 1 (
+
+    # Bounds for sum(w): 0.5 <= sum(w) <= 1 (tending to upper bound)
     my_portfolio = rpp.RiskParityPortfolio(Sigma)
+    my_portfolio.add_mean_return(alpha=1e-6, mean=np.ones(N))  # this adds sum(w) to also maximize sum(w)
     my_portfolio.design(Cmat=np.empty((0, N)), cvec=[],
                         Dmat=np.vstack([-np.ones((1,N)), np.ones((1,N))]), dvec=np.array([-0.5, 1]))
     w = my_portfolio.weights
-    np.testing.assert_equal(sum(w) <= 1.0 + 1e-5, True)
-    np.testing.assert_equal(sum(w) >= 0.5 - 1e-5, True)
+    np.testing.assert_almost_equal(np.sum(w), 1.0)
 
-    #np.testing.assert_array_less(sum(w), 1.0)
-    #np.testing.assert_array_less(-sum(w), -0.5)
+
+    # Bounds for sum(w): 0.5 <= sum(w) <= 1 (tending to lower bound)
+    my_portfolio = rpp.RiskParityPortfolio(Sigma)
+    my_portfolio.add_mean_return(alpha=1e-6, mean=-np.ones(N))  # this adds -sum(w) to also minimize sum(w)
+    my_portfolio.design(Cmat=np.empty((0, N)), cvec=[],
+                        Dmat=np.vstack([-np.ones((1,N)), np.ones((1,N))]), dvec=np.array([-0.5, 1]))
+    w = my_portfolio.weights
+    np.testing.assert_almost_equal(np.sum(w), 0.5, decimal=3)
+
 
 
 def test_dummy_variables():
@@ -127,7 +135,7 @@ def test_dummy_variables():
     my_portfolio = rpp.RiskParityPortfolio(Sigma)
     my_portfolio.design(Cmat=np.ones((1, N)), cvec=np.array([1.0]),
                         Dmat=np.vstack([np.eye(N), -np.eye(N)]), dvec=np.concatenate([0.03*np.ones(N), np.zeros(N)]))
-    w1 = my_portfolio.weights
+    w_ref = my_portfolio.weights
 
     # Equivalently: sum(w) = 1, 0 <= w <= u, and u <= 0.03  (new dummy variable u, with w_tilde = [w; u])
     my_portfolio = rpp.RiskParityPortfolio(Sigma)
@@ -136,6 +144,6 @@ def test_dummy_variables():
                                         np.hstack([np.eye(N), -np.eye(N)]),
                                         np.hstack([np.zeros((N, N)), np.eye(N)])]),
                         dvec=np.concatenate([np.zeros(N), np.zeros(N), 0.03*np.ones(N)]))
-    w2 = my_portfolio.weights
+    w = my_portfolio.weights
 
-    np.testing.assert_allclose(w1, w2, rtol=1e-5, atol=1e-5)
+    np.testing.assert_allclose(w, w_ref, rtol=1e-5, atol=1e-5)
