@@ -134,4 +134,4 @@ def test_dummy_variables():
                         dvec=np.concatenate([np.zeros(N), np.zeros(N), 0.03*np.ones(N)]))
     w2 = my_portfolio.weights
 
-    np.testing.assert_allclose(w1, w2, rtol=1e-5)
+    np.testing.assert_allclose(w1, w2, rtol=1e-5, rtol=1e-5)
