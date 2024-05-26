@@ -5,7 +5,8 @@ build/
 riskparityportfolio.egg-info/
 var/
 .DS_Store
-.coverage
+.idea/
+.coverage*
 docs/source/tutorials/.ipynb_checkpoints/*
 .eggs/
 .ipynb_checkpoints/*
