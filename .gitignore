@@ -1,12 +1,18 @@
 __pycache__/
-dist/
-build/
 *.so
 riskparityportfolio.egg-info/
 var/
 .DS_Store
-.idea/
 .coverage*
 docs/source/tutorials/.ipynb_checkpoints/*
-.eggs/
 .ipynb_checkpoints/*
+
+# IDE project files
+.idea/
+
+# Distribution / packaging
+dist/
+eggs/
+build/
+riskparityportfolio.egg-info
+
