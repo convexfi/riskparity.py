@@ -122,7 +122,7 @@ class RiskParityPortfolio:
     @risk_concentration.setter
     def risk_concentration(self, value):
         if value is None:
-            self._risk_concentration = RiskContribOverVarianceMinusBudget(self)
+            self._risk_concentration = RiskContribOverBudgetDoubleIndex(self)
         elif issubclass(value, RiskConcentrationFunction):
             self._risk_concentration = value(self)
         else:
